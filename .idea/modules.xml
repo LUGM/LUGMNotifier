@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/lugmnotifier.iml" filepath="$PROJECT_DIR$/app/lugmnotifier.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swipetorefresh/swipetorefresh.iml" filepath="$PROJECT_DIR$/swipetorefresh/swipetorefresh.iml" />
+    </modules>
+  </component>
+</project>
+

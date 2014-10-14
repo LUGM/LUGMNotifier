@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="someGrey">#dddddd</color>
+    <color name="peterRiver">#3498db</color>
+    <color name="alizarin">#e74c3c</color>
+    <color name="emerald">#2ecc71</color>
+    <color name="sunFlower">#f1c40f</color>
+    <color name="clouds">#ecf0f1</color>
+</resources>
