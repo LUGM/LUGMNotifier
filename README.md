@@ -1,6 +1,6 @@
 # LUG Manipal
 
-Get notifications and details about all the workshops and events being conducted bu Linux Users Group (LUG), Manipal. No registration required.
+Get notifications and details about all the workshops and events being conducted by Linux Users Group (LUG), Manipal. No registration required.
 
 The app uses:
 ==
