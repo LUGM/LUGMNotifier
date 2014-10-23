@@ -148,4 +148,27 @@ public class Functions {
         return val;
 
     }
+
+    /*
+     * Function to start email intent
+     */
+    public void emailIntent(Context context, String to, String subject, String body) {
+        StringBuilder builder = new StringBuilder("mailto:" + Uri.encode(to));
+        if (subject != null) {
+            builder.append("?subject=" + subject);
+            if (body != null) {
+                builder.append("&body=" + body);
+            }
+        }
+        String uri = builder.toString();
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
+        context.startActivity(intent);
+    }
+
+    /*
+     * Function to start browser intent
+     */
+    public void browerIntent(Context context, String url) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)));
+    }
 }

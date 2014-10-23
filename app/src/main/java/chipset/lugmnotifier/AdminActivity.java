@@ -1,8 +1,8 @@
 package chipset.lugmnotifier;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,8 +24,9 @@ import static chipset.lugmnotifier.resources.Constants.KEY_DETAIL;
 import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
 
 
-public class AdminActivity extends Activity {
+public class AdminActivity extends ActionBarActivity {
 
+    String title, detail;
     Button sendPushButton;
     EditText pushNotificationTitleEditText, pushNotificationDetailEditText;
     Functions functions = new Functions();
@@ -35,7 +36,7 @@ public class AdminActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         progressDialog = new ProgressDialog(AdminActivity.this);
         progressDialog.setMessage("Please wait");
         progressDialog.setCancelable(false);
@@ -46,15 +47,15 @@ public class AdminActivity extends Activity {
         sendPushButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
                 if (functions.isConnected(getApplicationContext())) {
-                    String title = pushNotificationTitleEditText.getText().toString();
-                    String detail = pushNotificationDetailEditText.getText().toString();
+                    title = pushNotificationTitleEditText.getText().toString();
+                    detail = pushNotificationDetailEditText.getText().toString();
                     if (title.isEmpty())
                         pushNotificationTitleEditText.setError("Required");
                     if (detail.isEmpty())
                         pushNotificationDetailEditText.setError("Required");
-                    else {
+                    if (!title.isEmpty() && !detail.isEmpty()) {
+                        progressDialog.show();
                         pushNotificationTitleEditText.setError(null);
                         pushNotificationDetailEditText.setError(null);
                         ParseObject notification = new ParseObject(KEY_CLASS_NOTIFICATION);
@@ -64,23 +65,23 @@ public class AdminActivity extends Activity {
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
-                                    Crouton.showText(AdminActivity.this, "Saved Successfully", Style.CONFIRM);
+                                    Crouton.showText(AdminActivity.this, "Saved Successfully", Style.INFO);
+                                    ParsePush push = new ParsePush();
+                                    push.setChannel("");
+                                    push.setMessage(title);
+                                    push.sendInBackground(new SendCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                progressDialog.dismiss();
+                                                Crouton.showText(AdminActivity.this, "Pushed Successfully", Style.CONFIRM);
+                                            } else {
+                                                Crouton.showText(AdminActivity.this, "Something went wrong\nPlease try again", Style.ALERT);
+                                            }
+                                        }
+                                    });
                                 } else {
-                                    Crouton.showText(AdminActivity.this, e.getMessage(), Style.ALERT);
-                                }
-                            }
-                        });
-                        ParsePush push = new ParsePush();
-                        push.setChannel("");
-                        push.setMessage(title);
-                        push.sendInBackground(new SendCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    progressDialog.dismiss();
-                                    Crouton.showText(AdminActivity.this, "Pushed Successfully", Style.CONFIRM);
-                                } else {
-                                    Crouton.showText(AdminActivity.this, e.getMessage(), Style.ALERT);
+                                    Crouton.showText(AdminActivity.this, "Something went wrong\nPlease try again", Style.ALERT);
                                 }
                             }
                         });

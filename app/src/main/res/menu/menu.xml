@@ -1,4 +1,13 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_admin" android:showAsAction="always|withText"
-        android:title="@string/action_admin" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_admin"
+        android:icon="@drawable/ic_action_add"
+        android:title="@string/action_admin"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_about"
+        android:icon="@drawable/ic_action_about"
+        android:title="@string/action_about"
+        app:showAsAction="ifRoom" />
 </menu>

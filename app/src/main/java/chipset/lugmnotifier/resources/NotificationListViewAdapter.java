@@ -1,6 +1,6 @@
 package chipset.lugmnotifier.resources;
 
-import android.content.Context;
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +14,12 @@ import chipset.lugmnotifier.R;
  */
 public class NotificationListViewAdapter extends BaseAdapter {
 
-    Context context;
-    LayoutInflater layoutInflater;
-    // ArrayList<HashMap<String, String>> dataArrayList = new ArrayList<HashMap<String, String>>();
     String[] title;
     String[] detail;
 
-    public NotificationListViewAdapter(Context context, String[] title, String[] detail) {
-        this.context = context;
+    public NotificationListViewAdapter(String[] title, String[] detail) {
         this.title = title;
         this.detail = detail;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -43,16 +38,28 @@ public class NotificationListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, final ViewGroup viewGroup) {
         if (view == null) {
-            view = layoutInflater.inflate(R.layout.notification_list_item, null);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.notification_list_item, viewGroup, false);
         }
-        TextView notificationTitleTextView = (TextView) view.findViewById(R.id.notificationTitleTextView);
-        TextView notificationDetailTextView = (TextView) view.findViewById(R.id.notificationDetailTextView);
-
+        TextView notificationTitleTextView, notificationDetailTextView;
+        notificationTitleTextView = (TextView) view.findViewById(R.id.notificationTitleTextView);
+        notificationDetailTextView = (TextView) view.findViewById(R.id.notificationDetailTextView);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(viewGroup.getContext());
+                builder.setTitle(title[i]);
+                builder.setMessage(detail[i]);
+                builder.setNeutralButton(android.R.string.ok, null);
+                builder.create();
+                builder.show();
+            }
+        });
         notificationTitleTextView.setText(title[i]);
         notificationDetailTextView.setText(detail[i]);
-
         return view;
     }
+
+
 }

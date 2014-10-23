@@ -1,17 +1,23 @@
 package chipset.lugmnotifier;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.parse.FindCallback;
@@ -31,20 +37,25 @@ import chipset.lugmnotifier.resources.NotificationListViewAdapter;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+import static chipset.lugmnotifier.resources.Constants.APP_PACKAGE;
+import static chipset.lugmnotifier.resources.Constants.APP_VERSION;
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
 import static chipset.lugmnotifier.resources.Constants.KEY_DETAIL;
 import static chipset.lugmnotifier.resources.Constants.KEY_SHOW;
 import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
+import static chipset.lugmnotifier.resources.Constants.URL_GITHUB;
+import static chipset.lugmnotifier.resources.Constants.URL_PLAY_STORE;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends ActionBarActivity {
 
 
-    ListView notificationsListView;
+    ListView notificationListView;
     SwipeRefreshLayout notificationSwipeRefreshLayout;
     Functions functions = new Functions();
     String[] title = new String[1];
     String[] detail = new String[1];
     boolean flag = false;
+    String value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +64,13 @@ public class HomeActivity extends Activity {
         ParseAnalytics.trackAppOpened(getIntent());
         try {
             flag = getIntent().getExtras().getBoolean(KEY_SHOW);
+            value = getIntent().getExtras().getString(KEY_TITLE);
         } catch (Exception e) {
             e.printStackTrace();
         }
         notificationSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.notificationSwipeRefreshLayout);
-        notificationsListView = (ListView) findViewById(R.id.notificationListView);
+        notificationListView = (ListView) findViewById(R.id.notificationListView);
+
         notificationSwipeRefreshLayout.setColorScheme(R.color.alizarin, R.color.emerald, R.color.peterRiver, R.color.sunFlower);
         notificationSwipeRefreshLayout.setActionBarSwipeIndicatorText(R.string.swipe_to_refresh);
         notificationSwipeRefreshLayout.setActionBarSwipeIndicatorRefreshingText(R.string.loading);
@@ -73,7 +86,6 @@ public class HomeActivity extends Activity {
                 new FetchData().getNotifications();
             }
         });
-        new FetchData().getNotifications();
 
 
     }
@@ -113,20 +125,9 @@ public class HomeActivity extends Activity {
                                 }
 
                             }
-                            notificationsListView.setAdapter(new NotificationListViewAdapter(getApplicationContext(), title, detail));
-                            notificationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                                    builder.setTitle(title[i]);
-                                    builder.setMessage(detail[i]);
-                                    builder.setNeutralButton(android.R.string.ok, null);
-                                    builder.create();
-                                    builder.show();
-                                }
-                            });
+                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail));
                         } else {
-                            Crouton.showText(HomeActivity.this, e.getMessage(), Style.ALERT);
+                            Crouton.showText(HomeActivity.this, "Something went wrong\nPlease try again ", Style.ALERT);
                         }
                     }
                 });
@@ -139,62 +140,119 @@ public class HomeActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
 
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        new FetchData().getNotifications();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_admin) {
-            final ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
-            progressDialog.setMessage("Please Wait");
-            progressDialog.setCancelable(false);
-            final EditText passwordEditText = new EditText(HomeActivity.this);
-            passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-            builder.setTitle("Admin Panel");
-            builder.setMessage("Enter the admin password");
-            builder.setView(passwordEditText);
-            builder.setPositiveButton("LOGIN", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            progressDialog.show();
-                            String password = passwordEditText.getText().toString();
-                            if (!password.isEmpty()) {
-                                ParseUser.logInInBackground("admin", password, new LogInCallback() {
-                                    public void done(ParseUser user, ParseException e) {
-                                        if (e == null) {
-                                            if (user != null) {
-                                                progressDialog.dismiss();
-                                                startActivity(new Intent(HomeActivity.this, AdminActivity.class));
+            if (functions.isConnected(HomeActivity.this)) {
+                final ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
+                progressDialog.setMessage("Please Wait");
+                progressDialog.setCancelable(false);
+                final EditText passwordEditText = new EditText(HomeActivity.this);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30);
+                layoutParams.gravity = Gravity.CENTER_VERTICAL;
+                layoutParams.setMargins(30, 0, 30, 0);
+                passwordEditText.setLayoutParams(layoutParams);
+                passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                builder.setTitle("Send a push");
+                builder.setMessage("Enter the admin password");
+                builder.setView(passwordEditText);
+                builder.setPositiveButton("LOGIN", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                progressDialog.show();
+                                String password = passwordEditText.getText().toString();
+                                if (!password.isEmpty()) {
+                                    ParseUser.logInInBackground("admin", password, new LogInCallback() {
+                                        public void done(ParseUser user, ParseException e) {
+                                            if (e == null) {
+                                                if (user != null) {
+                                                    progressDialog.dismiss();
+                                                    startActivity(new Intent(HomeActivity.this, AdminActivity.class));
+                                                } else {
+                                                    progressDialog.dismiss();
+                                                    Crouton.showText(HomeActivity.this, "Incorrect Password", Style.ALERT);
+                                                }
                                             } else {
                                                 progressDialog.dismiss();
                                                 Crouton.showText(HomeActivity.this, "Incorrect Password", Style.ALERT);
                                             }
-                                        } else {
-                                            progressDialog.dismiss();
-                                            Crouton.showText(HomeActivity.this, e.getMessage(), Style.ALERT);
                                         }
-                                    }
-                                });
-                            } else {
-                                progressDialog.dismiss();
-                                Crouton.showText(HomeActivity.this, "Incorrect Password", Style.ALERT);
+                                    });
+                                } else {
+                                    progressDialog.dismiss();
+                                    Crouton.showText(HomeActivity.this, "Incorrect Password", Style.ALERT);
+                                }
                             }
+                        }
+
+                );
+                builder.setNeutralButton("CANCEL", null);
+                builder.create();
+                builder.show();
+            } else {
+                Crouton.showText(HomeActivity.this, "No internet Connection", Style.ALERT);
+            }
+        } else if (id == R.id.action_about) {
+            if (functions.isConnected(HomeActivity.this)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                Button githubButton = new Button(HomeActivity.this);
+                githubButton.setText(Html.fromHtml(URL_GITHUB));
+                githubButton.setTextColor(getResources().getColor(R.color.peterRiver));
+                githubButton.setLinkTextColor(getResources().getColor(R.color.peterRiver));
+                githubButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                githubButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(URL_GITHUB)));
+                    }
+                });
+                builder.setTitle("About");
+                builder.setMessage("Get notifications and details about all the workshops and events being conducted by Linux Users Group (LUG), Manipal. No registration required.\n\nDeveloped and maintained by CHIPSET\n\nSource code for the app can be found at:");
+                builder.setNegativeButton("RATE THE APP", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (functions.isConnected(HomeActivity.this)) {
+                            functions.browerIntent(HomeActivity.this, URL_PLAY_STORE);
+                        } else {
+                            Crouton.showText(HomeActivity.this, "No internet Connection", Style.ALERT);
                         }
                     }
 
-            );
-            builder.setNeutralButton("CANCEL", null);
-            builder.create();
-            builder.show();
+                });
+                builder.setNeutralButton("SUGGESTIONS", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (functions.isConnected(HomeActivity.this)) {
+                            String body = "Device: " + Build.MANUFACTURER + " " + Build.BRAND + " " + Build.DEVICE + " " + Build.MODEL + "\nApp Version: " + APP_VERSION + "\nApp Package: " + APP_PACKAGE;
+                            functions.emailIntent(HomeActivity.this, "chipset95@gmail.com", "App Suggestion : LUG Manipal", body);
+                        } else {
+                            Crouton.showText(HomeActivity.this, "No internet Connection", Style.ALERT);
+                        }
+                    }
+                });
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setView(githubButton);
+                builder.create();
+                builder.show();
+            }
+//        } else if (id == R.id.action_open_licenses) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+//            builder.setTitle("Open Source Licenses");
+//            builder.setMessage(message);
+
         }
         return super.onOptionsItemSelected(item);
     }
