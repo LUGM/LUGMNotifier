@@ -41,6 +41,7 @@ import static chipset.lugmnotifier.resources.Constants.APP_PACKAGE;
 import static chipset.lugmnotifier.resources.Constants.APP_VERSION;
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
 import static chipset.lugmnotifier.resources.Constants.KEY_DETAIL;
+import static chipset.lugmnotifier.resources.Constants.KEY_IMAGE;
 import static chipset.lugmnotifier.resources.Constants.KEY_SHOW;
 import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
 import static chipset.lugmnotifier.resources.Constants.URL_GITHUB;
@@ -54,6 +55,7 @@ public class HomeActivity extends ActionBarActivity {
     Functions functions = new Functions();
     String[] title = new String[1];
     String[] detail = new String[1];
+    String[] image = new String[1];
     boolean flag = false;
     String value;
 
@@ -107,12 +109,15 @@ public class HomeActivity extends ActionBarActivity {
                                 detail = new String[1];
                                 title[0] = "Sorry";
                                 detail[0] = "No notifications";
+                                image[0] = "null";
                             } else {
                                 title = new String[parseObjects.size()];
                                 detail = new String[parseObjects.size()];
+                                image = new String[parseObjects.size()];
                                 for (int i = 0; i < parseObjects.size(); i++) {
                                     title[i] = parseObjects.get(i).getString(KEY_TITLE);
                                     detail[i] = parseObjects.get(i).getString(KEY_DETAIL);
+                                    image[i] = parseObjects.get(i).getString(KEY_IMAGE);
                                 }
                                 if (flag == true) {
                                     flag = false;
@@ -125,7 +130,7 @@ public class HomeActivity extends ActionBarActivity {
                                 }
 
                             }
-                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail));
+                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail, image));
                         } else {
                             Crouton.showText(HomeActivity.this, "Something went wrong\nPlease try again ", Style.ALERT);
                         }
@@ -225,7 +230,7 @@ public class HomeActivity extends ActionBarActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (functions.isConnected(HomeActivity.this)) {
-                            functions.browerIntent(HomeActivity.this, URL_PLAY_STORE);
+                            functions.broswerIntent(HomeActivity.this, URL_PLAY_STORE);
                         } else {
                             Crouton.showText(HomeActivity.this, "No internet Connection", Style.ALERT);
                         }
@@ -248,10 +253,6 @@ public class HomeActivity extends ActionBarActivity {
                 builder.create();
                 builder.show();
             }
-//        } else if (id == R.id.action_open_licenses) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-//            builder.setTitle("Open Source Licenses");
-//            builder.setMessage(message);
 
         }
         return super.onOptionsItemSelected(item);

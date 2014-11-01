@@ -5,10 +5,11 @@ package chipset.lugmnotifier.resources;
  */
 public class Constants {
 
-    public static String APPLICATION_ID = "APPLICATION_ID";
-    public static String CLIENT_KEY = "CLIENT_KEY";
+    public static String APPLICATION_ID = "wPBqAPFLBuSms7zJ5z3d3xWjV5VBMCXQNwpBaJRO";
+    public static String CLIENT_KEY = "4GjHWzJlDMNp8s2yvP8U5PCjkhVNIMrV6QfI8S1O";
 
     public static String KEY_TITLE = "title";
+    public static String KEY_IMAGE = "image";
     public static String KEY_CLASS_NOTIFICATION = "Notifications";
     public static String KEY_DETAIL = "detail";
     public static String KEY_SHOW = "show";

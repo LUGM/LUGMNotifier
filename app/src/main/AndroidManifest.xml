@@ -40,6 +40,7 @@
             android:name=".AdminActivity"
             android:label="@string/title_activity_admin"
             android:parentActivityName=".HomeActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />

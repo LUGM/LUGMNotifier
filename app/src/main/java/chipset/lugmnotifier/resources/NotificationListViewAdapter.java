@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import chipset.lugmnotifier.R;
 
@@ -16,10 +19,13 @@ public class NotificationListViewAdapter extends BaseAdapter {
 
     String[] title;
     String[] detail;
+    String[] image;
 
-    public NotificationListViewAdapter(String[] title, String[] detail) {
+    public NotificationListViewAdapter(String[] title, String[] detail, String[] image) {
         this.title = title;
         this.detail = detail;
+        this.image = image;
+
     }
 
     @Override
@@ -45,6 +51,7 @@ public class NotificationListViewAdapter extends BaseAdapter {
         TextView notificationTitleTextView, notificationDetailTextView;
         notificationTitleTextView = (TextView) view.findViewById(R.id.notificationTitleTextView);
         notificationDetailTextView = (TextView) view.findViewById(R.id.notificationDetailTextView);
+        ImageView notificationImageView = (ImageView) view.findViewById(R.id.notificationImageView);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,6 +65,10 @@ public class NotificationListViewAdapter extends BaseAdapter {
         });
         notificationTitleTextView.setText(title[i]);
         notificationDetailTextView.setText(detail[i]);
+        if (!image[i].equals("null")) {
+            notificationImageView.setVisibility(View.VISIBLE);
+            Picasso.with(viewGroup.getContext()).load(image[i]).placeholder(viewGroup.getContext().getResources().getDrawable(R.drawable.ic_launcher)).into(notificationImageView);
+        }
         return view;
     }
 

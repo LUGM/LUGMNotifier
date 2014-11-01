@@ -168,7 +168,7 @@ public class Functions {
     /*
      * Function to start browser intent
      */
-    public void browerIntent(Context context, String url) {
+    public void broswerIntent(Context context, String url) {
         context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)));
     }
 }

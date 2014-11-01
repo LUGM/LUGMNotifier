@@ -17,11 +17,19 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:hint="@string/detail" />
 
+    <EditText
+        android:id="@+id/pushNotificationImageEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pushNotificationDetailEditText"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:hint="@string/image" />
+
     <Button
         android:id="@+id/sendPushButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pushNotificationDetailEditText"
+        android:layout_below="@id/pushNotificationImageEditText"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:background="@color/black"
         android:text="@string/send_push"

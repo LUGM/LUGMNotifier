@@ -11,6 +11,7 @@
     <string name="send_push">PUSH</string>
     <string name="title">Enter Title</string>
     <string name="detail">Enter Details</string>
+    <string name="image">Enter Image URL</string>
 
 
 

@@ -3,7 +3,6 @@ package chipset.lugmnotifier;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,14 +20,15 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
 import static chipset.lugmnotifier.resources.Constants.KEY_DETAIL;
+import static chipset.lugmnotifier.resources.Constants.KEY_IMAGE;
 import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
 
 
 public class AdminActivity extends ActionBarActivity {
 
-    String title, detail;
+    String title, detail, image;
     Button sendPushButton;
-    EditText pushNotificationTitleEditText, pushNotificationDetailEditText;
+    EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText;
     Functions functions = new Functions();
     ProgressDialog progressDialog;
 
@@ -43,6 +43,7 @@ public class AdminActivity extends ActionBarActivity {
         sendPushButton = (Button) findViewById(R.id.sendPushButton);
         pushNotificationTitleEditText = (EditText) findViewById(R.id.pushNotificationTitleEditText);
         pushNotificationDetailEditText = (EditText) findViewById(R.id.pushNotificationDetailEditText);
+        pushNotificationImageEditText = (EditText) findViewById(R.id.pushNotificationImageEditText);
 
         sendPushButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +51,9 @@ public class AdminActivity extends ActionBarActivity {
                 if (functions.isConnected(getApplicationContext())) {
                     title = pushNotificationTitleEditText.getText().toString();
                     detail = pushNotificationDetailEditText.getText().toString();
+                    image = pushNotificationImageEditText.getText().toString();
+                    if (image.isEmpty())
+                        image = "null";
                     if (title.isEmpty())
                         pushNotificationTitleEditText.setError("Required");
                     if (detail.isEmpty())
@@ -61,6 +65,7 @@ public class AdminActivity extends ActionBarActivity {
                         ParseObject notification = new ParseObject(KEY_CLASS_NOTIFICATION);
                         notification.put(KEY_TITLE, title);
                         notification.put(KEY_DETAIL, detail);
+                        notification.put(KEY_IMAGE, image);
                         notification.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -98,14 +103,5 @@ public class AdminActivity extends ActionBarActivity {
     protected void onPause() {
         ParseUser.logOut();
         super.onPause();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        return super.onOptionsItemSelected(item);
     }
 }
