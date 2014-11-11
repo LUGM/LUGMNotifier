@@ -4,8 +4,6 @@ Get notifications and details about all the workshops and events being conducted
 
 The app uses:
 ==
-* [SwipeRefreshLayout](https://github.com/bduncavage/swipetorefresh) library by [Brett Duncavage](https://github.com/bduncavage)
-* [Crouton](https://github.com/keyboardsurfer/Crouton) library by [Keyboard Surfer](http://keyboardsurfer.de/projects.html)
 * [Picasso](https://square.github.io/picasso/) library by [Square Open Source](https://square.github.io/)
 * [Parse](http://www.parse.com) as backend
 
