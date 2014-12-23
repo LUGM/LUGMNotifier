@@ -4,6 +4,7 @@ Get notifications and details about all the workshops and events being conducted
 
 The app uses:
 ==
+* [Snackbar](https://github.com/nispok/snackbar) library by [William Mora](https://github.com/nispok)
 * [Picasso](https://square.github.io/picasso/) library by [Square Open Source](https://square.github.io/)
 * [Parse](http://www.parse.com) as backend
 
