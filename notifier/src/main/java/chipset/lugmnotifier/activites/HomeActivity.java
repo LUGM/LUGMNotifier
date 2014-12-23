@@ -1,4 +1,4 @@
-package chipset.lugmnotifier;
+package chipset.lugmnotifier.activites;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.nispok.snackbar.Snackbar;
 import com.parse.FindCallback;
@@ -38,19 +39,23 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import chipset.lugmnotifier.R;
 import chipset.lugmnotifier.resources.Functions;
 import chipset.lugmnotifier.resources.NotificationListViewAdapter;
 
 import static chipset.lugmnotifier.resources.Constants.APP_PACKAGE;
 import static chipset.lugmnotifier.resources.Constants.APP_VERSION;
+import static chipset.lugmnotifier.resources.Constants.EMAIL_MAILING;
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
 import static chipset.lugmnotifier.resources.Constants.KEY_DETAIL;
 import static chipset.lugmnotifier.resources.Constants.KEY_IMAGE;
 import static chipset.lugmnotifier.resources.Constants.KEY_SHOW;
 import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
+import static chipset.lugmnotifier.resources.Constants.URL_CORE_COMM;
 import static chipset.lugmnotifier.resources.Constants.URL_FB_GROUP;
 import static chipset.lugmnotifier.resources.Constants.URL_FB_PAGE;
 import static chipset.lugmnotifier.resources.Constants.URL_GITHUB;
+import static chipset.lugmnotifier.resources.Constants.URL_GITHUB_ORG;
 import static chipset.lugmnotifier.resources.Constants.URL_PLAY_STORE;
 import static chipset.lugmnotifier.resources.Constants.URL_TW_HANDLER;
 import static chipset.lugmnotifier.resources.Constants.URL_WEBSITE;
@@ -61,6 +66,7 @@ public class HomeActivity extends ActionBarActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     ListView notificationListView, drawerListView;
     SwipeRefreshLayout notificationSwipeRefreshLayout;
+    ProgressBar notificationLoadingProgressBar;
     Functions functions = new Functions();
     String[] title = new String[1];
     String[] detail = new String[1];
@@ -72,9 +78,11 @@ public class HomeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        notificationLoadingProgressBar = (ProgressBar) findViewById(R.id.notifications_loading_progress_bar);
+        notificationLoadingProgressBar.setVisibility(View.VISIBLE);
         try {
             flag = getIntent().getExtras().getBoolean(KEY_SHOW);
             value = getIntent().getExtras().getString(KEY_TITLE);
@@ -85,7 +93,7 @@ public class HomeActivity extends ActionBarActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(HomeActivity.this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        String[] val = {"Visit Us At", " Facebook Page", "Facebook Group", "Twitter", "Website"};
+        String[] val = {"GitHub Organisation", "Facebook Page", "Facebook Group", "Twitter", "Website", "Core Committee", "Mailing List"};
         notificationSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.notificationSwipeRefreshLayout);
         notificationListView = (ListView) findViewById(R.id.notificationListView);
         drawerListView = (ListView) findViewById(R.id.drawer_list);
@@ -103,20 +111,32 @@ public class HomeActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
+                    case 0: {
+                        functions.browserIntent(getApplicationContext(), URL_GITHUB_ORG);
+                        break;
+                    }
                     case 1: {
-                        functions.broswerIntent(getApplicationContext(), URL_FB_PAGE);
+                        functions.browserIntent(getApplicationContext(), URL_FB_PAGE);
                         break;
                     }
                     case 2: {
-                        functions.broswerIntent(getApplicationContext(), URL_FB_GROUP);
+                        functions.browserIntent(getApplicationContext(), URL_FB_GROUP);
                         break;
                     }
                     case 3: {
-                        functions.broswerIntent(getApplicationContext(), URL_TW_HANDLER);
+                        functions.browserIntent(getApplicationContext(), URL_TW_HANDLER);
                         break;
                     }
                     case 4: {
-                        functions.broswerIntent(getApplicationContext(), URL_WEBSITE);
+                        functions.browserIntent(getApplicationContext(), URL_WEBSITE);
+                        break;
+                    }
+                    case 5: {
+                        functions.browserIntent(getApplicationContext(), URL_CORE_COMM);
+                        break;
+                    }
+                    case 6: {
+                        functions.emailIntent(getApplicationContext(), EMAIL_MAILING, "", "\n\n\n\nSent from LUG Manipal Android App");
                         break;
                     }
                 }
@@ -135,6 +155,7 @@ public class HomeActivity extends ActionBarActivity {
                     @Override
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         notificationSwipeRefreshLayout.setRefreshing(false);
+                        notificationLoadingProgressBar.setVisibility(View.GONE);
                         if (e == null) {
                             if (parseObjects.size() == 0) {
                                 title = new String[1];
@@ -156,7 +177,7 @@ public class HomeActivity extends ActionBarActivity {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                                     builder.setTitle(title[0]);
                                     builder.setMessage(detail[0]);
-                                    builder.setNeutralButton(android.R.string.ok, null);
+                                    builder.setPositiveButton(android.R.string.ok, null);
                                     builder.create();
                                     builder.show();
                                 }
@@ -171,6 +192,7 @@ public class HomeActivity extends ActionBarActivity {
                     }
                 });
             } else {
+                notificationLoadingProgressBar.setVisibility(View.GONE);
                 notificationSwipeRefreshLayout.setRefreshing(false);
                 Snackbar.with(getApplicationContext()) // context
                         .text("No Internet Connection") // text to display
@@ -273,11 +295,11 @@ public class HomeActivity extends ActionBarActivity {
                 });
                 builder.setTitle("About");
                 builder.setMessage("Get notifications and details about all the workshops and events being conducted by Linux Users Group (LUG), Manipal. No registration required.\n\nDeveloped and maintained by CHIPSET\n\nSource code for the app can be found at:");
-                builder.setNegativeButton("RATE THE APP", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("RATE & REVIEW THE APP", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (functions.isConnected(HomeActivity.this)) {
-                            functions.broswerIntent(HomeActivity.this, URL_PLAY_STORE);
+                            functions.browserIntent(HomeActivity.this, URL_PLAY_STORE);
                         } else {
                             Snackbar.with(getApplicationContext()) // context
                                     .text("No Internet Connection") // text to display

@@ -1,8 +1,9 @@
-package chipset.lugmnotifier;
+package chipset.lugmnotifier.activites;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
 
+import chipset.lugmnotifier.R;
 import chipset.lugmnotifier.resources.Functions;
 
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
@@ -30,11 +32,14 @@ public class AdminActivity extends ActionBarActivity {
     EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText;
     Functions functions = new Functions();
     ProgressDialog progressDialog;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_admin);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         progressDialog = new ProgressDialog(AdminActivity.this);
         progressDialog.setMessage("Please wait");

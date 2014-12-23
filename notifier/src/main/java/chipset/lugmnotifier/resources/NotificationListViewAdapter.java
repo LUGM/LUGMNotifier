@@ -58,7 +58,7 @@ public class NotificationListViewAdapter extends BaseAdapter {
                 AlertDialog.Builder builder = new AlertDialog.Builder(viewGroup.getContext());
                 builder.setTitle(title[i]);
                 builder.setMessage(detail[i]);
-                builder.setNeutralButton(android.R.string.ok, null);
+                builder.setPositiveButton(android.R.string.ok, null);
                 builder.create();
                 builder.show();
             }

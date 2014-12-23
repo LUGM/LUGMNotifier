@@ -155,20 +155,20 @@ public class Functions {
     public void emailIntent(Context context, String to, String subject, String body) {
         StringBuilder builder = new StringBuilder("mailto:" + Uri.encode(to));
         if (subject != null) {
-            builder.append("?subject=" + subject);
+            builder.append("?subject=").append(subject);
             if (body != null) {
-                builder.append("&body=" + body);
+                builder.append("&body=").append(body);
             }
         }
         String uri = builder.toString();
-        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
     /*
      * Function to start browser intent
      */
-    public void broswerIntent(Context context, String url) {
+    public void browserIntent(Context context, String url) {
         context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }

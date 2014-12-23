@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.parse.ParsePushBroadcastReceiver;
 
-import chipset.lugmnotifier.HomeActivity;
+import chipset.lugmnotifier.activites.HomeActivity;
 
 import static chipset.lugmnotifier.resources.Constants.KEY_SHOW;
 import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;

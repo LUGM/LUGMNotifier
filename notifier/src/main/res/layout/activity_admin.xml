@@ -1,37 +1,17 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_vertical_margin">
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/pushNotificationTitleEditText"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_admin"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/title" />
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/black" />
 
-    <EditText
-        android:id="@+id/pushNotificationDetailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pushNotificationTitleEditText"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:hint="@string/detail" />
-
-    <EditText
-        android:id="@+id/pushNotificationImageEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pushNotificationDetailEditText"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:hint="@string/image" />
-
-    <Button
-        android:id="@+id/sendPushButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pushNotificationImageEditText"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:background="@color/black"
-        android:text="@string/send_push"
-        android:textColor="@color/clouds" />
-</RelativeLayout>
+    <include layout="@layout/rest_of_admin" />
+</LinearLayout>

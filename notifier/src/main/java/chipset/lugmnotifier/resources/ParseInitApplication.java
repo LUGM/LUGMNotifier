@@ -29,6 +29,7 @@ public class ParseInitApplication extends Application {
             }
         });
         ParseInstallation.getCurrentInstallation().saveInBackground();
+
     }
 
 }

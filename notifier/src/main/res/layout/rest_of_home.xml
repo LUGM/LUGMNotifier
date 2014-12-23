@@ -9,6 +9,14 @@
         android:layout_height="match_parent"
         android:background="@color/someGrey">
 
+
+        <ProgressBar
+            android:id="@+id/notifications_loading_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
         <android.support.v4.widget.SwipeRefreshLayout
 
             android:id="@+id/notificationSwipeRefreshLayout"
@@ -27,13 +35,9 @@
         </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/drawer_list"
-        android:layout_width="320dp"
+    <include
+        layout="@layout/drawer"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
-        android:background="@color/someGrey" />
+        android:layout_width="320dp"
+        android:layout_gravity="start" />
 </android.support.v4.widget.DrawerLayout>
