@@ -7,14 +7,17 @@
     <string name="title_activity_admin">Admin</string>
     <string name="action_admin">Admin</string>
     <string name="action_about">About</string>
-    <string name="rate">Rate</string>
     <string name="send_push">PUSH</string>
     <string name="title">Enter Title</string>
     <string name="detail">Enter Details</string>
     <string name="image">Enter Image URL</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-
-
-
+    <string name="url_github">https://github.com/chipset95/LUGMNotifier</string>
+    <string name="about">Get notifications and details about all the workshops and events being conducted by Linux Users Group (LUG), Manipal. No registration required.\n\nDeveloped and maintained by CHIPSET.\n\nSource code for the app can be found at:</string>
+    <string name="rnr">RATE &amp; REVIEW THE APP</string>
+    <string name="sug">SUGGESTIONS</string>
+    <string name="password">Password</string>
+    <string name="ep">Enter Password</string>
+    <string name="login">LOGIN</string>
 </resources>
