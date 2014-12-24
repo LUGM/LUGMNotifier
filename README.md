@@ -9,3 +9,9 @@ The app uses:
 * [Parse](http://www.parse.com) as backend
 
 [![Get the app from playstore](https://developer.android.com/images/brand/en_app_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=chipset.lugmnotifier)
+
+Get [APK]()
+
+<img src="https://raw.githubusercontent.com/chipset95/LUGMNotifier/master/Screens/6/device-2014-12-24-125152.png" width="300"/>
+<img src="https://raw.githubusercontent.com/chipset95/LUGMNotifier/master/Screens/7/device-2014-12-24-131331.png" width="500"/>
+<img src="https://raw.githubusercontent.com/chipset95/LUGMNotifier/master/Screens/10/device-2014-12-24-130133.png" width="600"/>
