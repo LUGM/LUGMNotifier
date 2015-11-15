@@ -1,10 +1,8 @@
 # LUG Manipal
 
-[![Join the chat at https://gitter.im/LUGM/LUGMNotifier](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/LUGM/LUGMNotifier?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 Get notifications and details about all the workshops and events being conducted by Linux Users Group (LUG), Manipal. No registration required.
 
-The app uses:
+### The app uses:
 ==
 * [Snackbar](https://github.com/nispok/snackbar) library by [William Mora](https://github.com/nispok)
 * [Picasso](https://square.github.io/picasso/) library by [Square Open Source](https://square.github.io/)
