@@ -1,5 +1,5 @@
 # LUG Manipal 
-[![Build Status](https://travis-ci.org/LUGM/LUGMNotifier.svg?branch=master)](https://travis-ci.org/LUGM/LUGMNotifier)
+[![Build Status](https://travis-ci.org/LUGM/LUGMNotifier.svg?branch=dev)](https://travis-ci.org/LUGM/LUGMNotifier)
 
 Get notifications and details about all the workshops and events being conducted by Linux Users Group (LUG), Manipal. No registration required.
 
