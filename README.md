@@ -1,7 +1,13 @@
-# LUG Manipal
-[![Build Status](https://travis-ci.org/LUGM/LUGMNotifier.svg?branch=master)](https://travis-ci.org/LUGM/LUGMNotifier)
-
+# LUG Manipal 
+[![Build Status](https://travis-ci.org/LUGM/LUGMNotifier.svg?branch=dev)](https://travis-ci.org/LUGM/LUGMNotifier)
 Get notifications and details about all the workshops and events being conducted by Linux Users Group (LUG), Manipal. No registration required.
+
+## Issues
+Issues are listed here. If you have any suggestions for improvements please feel free to open a new issue and start a chat for on Gitter.
+[![Join the chat at https://gitter.im/LUGM/LUGMNotifier](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/LUGM/LUGMNotifier?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+## Contribution
+Fork the repo, checkout a new branch, work on it, send a pull request. We'll be follwing this routine. Try not to send a pull request from master :smile:
 
 ### The app uses:
 ==
