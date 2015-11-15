@@ -19,3 +19,5 @@ Fork the repo, checkout a new branch, work on it, send a pull request. We'll be 
 <img src="/art/6/device-2014-12-24-125152.png" width="400"/>
 <img src="/art/7/device-2014-12-24-131331.png" width="500"/>
 <img src="/art/10/device-2014-12-24-130133.png" width="600"/>
+
+The LUGMNotifier is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
