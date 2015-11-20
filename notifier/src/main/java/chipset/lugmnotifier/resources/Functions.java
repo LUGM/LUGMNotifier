@@ -15,6 +15,8 @@ import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import chipset.lugmnotifier.R;
+
 public class Functions {
 
     /*
