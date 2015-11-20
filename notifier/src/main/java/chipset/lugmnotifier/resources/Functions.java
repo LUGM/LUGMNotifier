@@ -51,7 +51,7 @@ public class Functions {
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification mBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(title).setContentText(subtitle)
-                .setSmallIcon(icon).setContentIntent(pendingResultIntent)
+                .setSmallIcon(R.drawable.ic_notification).setContentIntent(pendingResultIntent)
                 .setSound(soundUri).setAutoCancel(true).build();
         mNotifyMgr = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -70,7 +70,7 @@ public class Functions {
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification mBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(title).setContentText(subtitle)
-                .setSmallIcon(icon).setContentIntent(pendingResultIntent)
+                .setSmallIcon(R.drawable.ic_notification).setContentIntent(pendingResultIntent)
                 .setAutoCancel(true).build();
         mNotifyMgr = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
