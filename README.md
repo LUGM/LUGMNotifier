@@ -7,7 +7,7 @@ Get notifications and details about all the workshops and events being conducted
 Issues are listed here. If you have any suggestions for improvements please feel free to open a new issue and start a chat on [![Join the chat at https://gitter.im/LUGM/LUGMNotifier](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/LUGM/LUGMNotifier?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Contribution
-Fork the repo, checkout a new branch, work on it, send a pull request. We'll be follwing this routine. Try not to send a pull request from and to master :smile:
+Read the [guidlines](https://github.com/LUGM/LUGMNotifier/blob/dev/CONTRIBUTION.md) for contribution to this app
 
 ### The app uses:
 * [Snackbar](https://github.com/nispok/snackbar) library by [William Mora](https://github.com/nispok)
