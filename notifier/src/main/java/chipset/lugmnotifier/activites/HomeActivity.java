@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -19,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.nispok.snackbar.Snackbar;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -50,7 +51,7 @@ import static chipset.lugmnotifier.resources.Constants.URL_WEBSITE;
  * Project : LUGMNotifier
  * Date : 12/10/14
  */
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends AppCompatActivity {
     Toolbar mToolbar;
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
@@ -63,6 +64,7 @@ public class HomeActivity extends ActionBarActivity {
     String[] image = new String[1];
     boolean flag = false;
     String value;
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class HomeActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         notificationLoadingProgressBar = (ProgressBar) findViewById(R.id.notifications_loading_progress_bar);
         notificationLoadingProgressBar.setVisibility(View.VISIBLE);
+        coordinatorLayout =(CoordinatorLayout)findViewById(R.id.home_coordinator_layout);
         try {
             flag = getIntent().getExtras().getBoolean(KEY_SHOW);
             value = getIntent().getExtras().getString(KEY_TITLE);
@@ -175,18 +178,16 @@ public class HomeActivity extends ActionBarActivity {
                             }
                             notificationListView.setAdapter(new NotificationListViewAdapter(title, detail, image));
                         } else {
-                            Snackbar.with(getApplicationContext()) // context
-                                    .text("Something went wrong\nPlease try again later") // text to display
-                                    .show(HomeActivity.this);
+                            Snackbar snackbar= android.support.design.widget.Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", android.support.design.widget.Snackbar.LENGTH_SHORT);
+                            snackbar.show();
                         }
                     }
                 });
             } else {
                 notificationLoadingProgressBar.setVisibility(View.GONE);
                 notificationSwipeRefreshLayout.setRefreshing(false);
-                Snackbar.with(getApplicationContext()) // context
-                        .text("No Internet Connection") // text to display
-                        .show(HomeActivity.this);
+                Snackbar snackbar=Snackbar.make(coordinatorLayout, "No Internet Connection",Snackbar.LENGTH_SHORT);
+                snackbar.show();
             }
         }
     }
@@ -232,7 +233,7 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(Gravity.START | Gravity.LEFT)) {
+        if (mDrawerLayout.isDrawerOpen(Gravity.START|Gravity.LEFT)) {
             mDrawerLayout.closeDrawers();
             return;
         }

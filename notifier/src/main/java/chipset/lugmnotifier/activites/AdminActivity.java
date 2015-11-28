@@ -2,13 +2,14 @@ package chipset.lugmnotifier.activites;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.support.design.widget.Snackbar;
 
-import com.nispok.snackbar.Snackbar;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -25,7 +26,7 @@ import static chipset.lugmnotifier.resources.Constants.KEY_IMAGE;
 import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
 
 
-public class AdminActivity extends ActionBarActivity {
+public class AdminActivity extends AppCompatActivity {
 
     String title, detail, image;
     Button sendPushButton;
@@ -33,6 +34,7 @@ public class AdminActivity extends ActionBarActivity {
     Functions functions = new Functions();
     ProgressDialog progressDialog;
     Toolbar toolbar;
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class AdminActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar_admin);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        coordinatorLayout=(CoordinatorLayout)findViewById(R.id.admin_coordinator_layout);
         progressDialog = new ProgressDialog(AdminActivity.this);
         progressDialog.setMessage("Please wait");
         progressDialog.setCancelable(false);
@@ -74,9 +77,8 @@ public class AdminActivity extends ActionBarActivity {
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
-                                    Snackbar.with(getApplicationContext()) // context
-                                            .text("Saved Successfully") // text to display
-                                            .show(AdminActivity.this);
+                                    Snackbar snackbar=Snackbar.make(coordinatorLayout, "Saved Successfully", Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                     ParsePush push = new ParsePush();
                                     push.setChannel("");
                                     push.setMessage(title);
@@ -85,29 +87,25 @@ public class AdminActivity extends ActionBarActivity {
                                         public void done(ParseException e) {
                                             if (e == null) {
                                                 progressDialog.dismiss();
-                                                Snackbar.with(getApplicationContext()) // context
-                                                        .text("Pushed Successfully") // text to display
-                                                        .show(AdminActivity.this);
+                                                Snackbar snackbar=Snackbar.make(coordinatorLayout, "Pushed Successfully",Snackbar.LENGTH_SHORT);
+                                                snackbar.show();
                                             } else {
-                                                Snackbar.with(getApplicationContext()) // context
-                                                        .text("Something went wrong\nPlease try again later") // text to display
-                                                        .show(AdminActivity.this);
+                                                Snackbar snackbar=Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later",Snackbar.LENGTH_SHORT);
+                                                snackbar.show();
                                             }
                                         }
                                     });
                                 } else {
-                                    Snackbar.with(getApplicationContext()) // context
-                                            .text("Something went wrong\nPlease try again later") // text to display
-                                            .show(AdminActivity.this);
+                                    Snackbar snackbar=Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later",Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                 }
                             }
                         });
                     }
                 } else {
                     progressDialog.dismiss();
-                    Snackbar.with(getApplicationContext()) // context
-                            .text("No Internet Connection") // text to display
-                            .show(AdminActivity.this);
+                    Snackbar snackbar=Snackbar.make(coordinatorLayout, "No Internet Connection",Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
         });
