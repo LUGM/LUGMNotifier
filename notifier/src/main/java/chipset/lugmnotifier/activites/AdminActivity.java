@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +47,8 @@ public class AdminActivity extends AppCompatActivity {
     String title, detail, image, date;
     Calendar calendar = Calendar.getInstance();
     Button sendPushButton;
-    EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText, pushNotificationDateEditText;
+    EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText;
+    public static EditText  pushNotificationDateEditText;
     Functions functions = new Functions();
     ProgressDialog progressDialog;
     Toolbar toolbar;
@@ -72,11 +74,12 @@ public class AdminActivity extends AppCompatActivity {
         pushNotificationDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment dialogFragment=new DatePickerFragment();
-                dialogFragment.show(getSupportFragmentManager(),"datePicker");
+                DialogFragment dialogFragment = new DatePickerFragment();
+                dialogFragment.show(getSupportFragmentManager(), "datePicker");
+                pushNotificationDateEditText.setText(new Date(returnCalenderMillis()).toString());
             }
         });
-        pushNotificationDateEditText.setText(new Date(returnCalenderMillis()).toString());
+
 
         sendPushButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +132,7 @@ public class AdminActivity extends AppCompatActivity {
                                 } else {
                                     Snackbar snackbar=Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later",Snackbar.LENGTH_SHORT);
                                     snackbar.show();
+                                    Log.e("com.parse.push","Error",e);
                                 }
                             }
                         });

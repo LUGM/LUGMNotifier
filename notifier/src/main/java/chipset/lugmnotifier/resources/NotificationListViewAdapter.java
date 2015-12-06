@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -59,6 +60,7 @@ public class NotificationListViewAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View getView(final int i, View view, final ViewGroup viewGroup) {
         if (view == null) {
@@ -85,7 +87,8 @@ public class NotificationListViewAdapter extends BaseAdapter {
         notificationDetailTextView.setText(detail[i]);
         if(date[i]!=0) {
             notificationDateTextView.setVisibility(View.VISIBLE);
-            notificationDateTextView.setText(new Date(date[i]).toString());
+            Date eventDate=new Date(date[i]);
+            notificationDateTextView.setText(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(eventDate));
         }
         if (!image[i].equals("null")) {
             notificationImageView.setVisibility(View.VISIBLE);
@@ -101,12 +104,11 @@ public class NotificationListViewAdapter extends BaseAdapter {
                 intent.setType("vnd.android.cursor.item/event");
                 intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, date[i]);
                 intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false);
-                intent.putExtra(CalendarContract.Events.TITLE, "Sample");
+                intent.putExtra(CalendarContract.Events.TITLE, title[i]);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
         return view;
     }
-
-
 }

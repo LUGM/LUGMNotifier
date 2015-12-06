@@ -10,6 +10,9 @@ import android.text.format.DateFormat;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Date;
+
+import chipset.lugmnotifier.activites.AdminActivity;
 
 /**
  * Developer: anuraag
@@ -19,6 +22,7 @@ import java.util.Calendar;
  */
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    Calendar calendar=Calendar.getInstance();
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
@@ -37,6 +41,18 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         editor.putInt("Hour",hourOfDay);
         editor.putInt("Minutes",minutes);
         editor.apply();
+        AdminActivity.pushNotificationDateEditText.setText(new Date(returnCalenderMillis()).toString());
+    }
+    public long returnCalenderMillis(){
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(DatePickerFragment.PrefsFile,0);
+        int year=sharedPreferences.getInt("Year", 0);
+        int month=sharedPreferences.getInt("Month",1);
+        int day=sharedPreferences.getInt("Day",2);
+        int hour=sharedPreferences.getInt("Hour",3);
+        int minutes=sharedPreferences.getInt("Minutes",4);
+        calendar.clear();
+        calendar.set(year, month, day, hour, minutes);
+        return calendar.getTimeInMillis();
     }
 }
 

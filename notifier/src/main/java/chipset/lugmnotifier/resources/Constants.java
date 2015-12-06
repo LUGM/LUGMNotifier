@@ -16,7 +16,7 @@ public class Constants {
 
     public static String KEY_TITLE = "title";
     public static String KEY_IMAGE = "image";
-    public static String KEY_DATE = "time since epoch";
+    public static String KEY_DATE = "timeSinceEpoch";
     public static String KEY_CLASS_NOTIFICATION = "Notifications";
     public static String KEY_DETAIL = "detail";
     public static String KEY_SHOW = "show";
