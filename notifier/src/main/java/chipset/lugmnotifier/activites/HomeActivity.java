@@ -34,6 +34,7 @@ import chipset.lugmnotifier.resources.NotificationListViewAdapter;
 
 import static chipset.lugmnotifier.resources.Constants.EMAIL_MAILING;
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
+import static chipset.lugmnotifier.resources.Constants.KEY_DATE;
 import static chipset.lugmnotifier.resources.Constants.KEY_DETAIL;
 import static chipset.lugmnotifier.resources.Constants.KEY_IMAGE;
 import static chipset.lugmnotifier.resources.Constants.KEY_SHOW;
@@ -47,9 +48,11 @@ import static chipset.lugmnotifier.resources.Constants.URL_WEBSITE;
 
 /**
  * Developer: chipset
- * Package : chipset.lugmnotifier.resources
+ * Modified by: anuraag
+ * Package : chipset.lugmnotifier.activities
  * Project : LUGMNotifier
- * Date : 12/10/14
+ * Date Created: 12/10/14
+ * Last Modified: 06/12/15
  */
 public class HomeActivity extends AppCompatActivity {
     Toolbar mToolbar;
@@ -62,6 +65,7 @@ public class HomeActivity extends AppCompatActivity {
     String[] title = new String[1];
     String[] detail = new String[1];
     String[] image = new String[1];
+    long[] date = new long[1];
     boolean flag = false;
     String value;
     private CoordinatorLayout coordinatorLayout;
@@ -155,14 +159,17 @@ public class HomeActivity extends AppCompatActivity {
                                 detail = new String[1];
                                 title[0] = "Sorry";
                                 detail[0] = "No notifications";
+                                date[0] = 0;
                                 image[0] = "null";
                             } else {
                                 title = new String[parseObjects.size()];
                                 detail = new String[parseObjects.size()];
                                 image = new String[parseObjects.size()];
+                                date = new long[parseObjects.size()];
                                 for (int i = 0; i < parseObjects.size(); i++) {
                                     title[i] = parseObjects.get(i).getString(KEY_TITLE);
                                     detail[i] = parseObjects.get(i).getString(KEY_DETAIL);
+                                    date[i] = parseObjects.get(i).getLong(KEY_DATE);
                                     image[i] = parseObjects.get(i).getString(KEY_IMAGE);
                                 }
                                 if (flag) {
@@ -176,7 +183,7 @@ public class HomeActivity extends AppCompatActivity {
                                 }
 
                             }
-                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail, image));
+                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail, image, date,getApplicationContext()));
                         } else {
                             Snackbar snackbar= android.support.design.widget.Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", android.support.design.widget.Snackbar.LENGTH_SHORT);
                             snackbar.show();

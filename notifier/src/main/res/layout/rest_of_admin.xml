@@ -22,15 +22,23 @@
         android:id="@+id/pushNotificationImageEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pushNotificationDetailEditText"
+        android:layout_below="@+id/pushNotificationDateEditText"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:hint="@string/image" />
+
+    <EditText
+        android:id="@+id/pushNotificationDateEditText"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/date"
+        android:layout_below="@+id/pushNotificationDetailEditText"/>
 
     <Button
         android:id="@+id/sendPushButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pushNotificationImageEditText"
+        android:layout_below="@+id/pushNotificationImageEditText"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:background="@color/black"
         android:text="@string/send_push"

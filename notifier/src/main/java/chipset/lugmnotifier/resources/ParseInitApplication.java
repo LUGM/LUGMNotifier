@@ -7,7 +7,9 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import static chipset.lugmnotifier.resources.Constants.APPLICATION_ID;
 import static chipset.lugmnotifier.resources.Constants.CLIENT_KEY;
@@ -29,7 +31,6 @@ public class ParseInitApplication extends Application {
             }
         });
         ParseInstallation.getCurrentInstallation().saveInBackground();
-
     }
 
 }
