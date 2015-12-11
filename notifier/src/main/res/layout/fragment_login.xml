@@ -1,47 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="320dp"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/activity_horizontal_margin"
-    android:orientation="vertical">
-
-    <TextView
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/login_coordinator_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:text="@string/ep" />
+        android:padding="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
 
-    <EditText
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:textSize="15sp"
-        android:id="@+id/password_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/password"
-        android:inputType="textPassword" />
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ep" />
 
-    <LinearLayout
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <EditText
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:textSize="15sp"
+            android:id="@+id/password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
 
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:text="@android:string/cancel"
-            style="?android:attr/borderlessButtonStyle" />
+        <LinearLayout
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            style="?android:attr/borderlessButtonStyle"
-            android:id="@+id/login_button"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:text="@string/login" />
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:text="@android:string/cancel"
+                style="?android:attr/borderlessButtonStyle" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/login_button"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:text="@string/login" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
