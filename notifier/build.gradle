@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 23
     buildToolsVersion "21.1.2"
 
     defaultConfig {
@@ -27,4 +27,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.nispok:snackbar:2.7.0'
     compile 'com.parse.bolts:bolts-android:1.1.4'
+    compile 'com.android.support:customtabs:23.1.1'
 }

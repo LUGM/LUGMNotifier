@@ -48,7 +48,8 @@
         <activity
             android:name=".activites.DialogActivity"
             android:theme="@style/DialogTheme" />
-
+        <activity
+            android:name=".activites.WebViewActivity" />
         <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver">

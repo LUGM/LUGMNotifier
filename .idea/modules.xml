@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/lugmnotifier.iml" filepath="$PROJECT_DIR$/app/lugmnotifier.iml" />
-      <module fileurl="file://$PROJECT_DIR$/swipetorefresh/swipetorefresh.iml" filepath="$PROJECT_DIR$/swipetorefresh/swipetorefresh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LUGMNotifier.iml" filepath="$PROJECT_DIR$/LUGMNotifier.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notifier/notifier.iml" filepath="$PROJECT_DIR$/notifier/notifier.iml" />
     </modules>
   </component>
 </project>
-

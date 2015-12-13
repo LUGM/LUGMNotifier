@@ -3,13 +3,16 @@ package chipset.lugmnotifier.activites;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +31,8 @@ import com.parse.ParseQuery;
 import java.util.List;
 
 import chipset.lugmnotifier.R;
+import chipset.lugmnotifier.chromecustomtabs.CustomTabActivityHelper;
+import chipset.lugmnotifier.chromecustomtabs.WebViewFallback;
 import chipset.lugmnotifier.resources.Functions;
 import chipset.lugmnotifier.resources.NotificationListViewAdapter;
 
@@ -100,35 +105,51 @@ public class HomeActivity extends ActionBarActivity {
         drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String URL = null;
                 switch (i) {
                     case 0: {
-                        functions.browserIntent(getApplicationContext(), URL_GITHUB_ORG);
+                        //functions.browserIntent(getApplicationContext(), URL_GITHUB_ORG);
+                        URL = URL_GITHUB_ORG;
                         break;
                     }
                     case 1: {
-                        functions.browserIntent(getApplicationContext(), URL_FB_PAGE);
+                        //functions.browserIntent(getApplicationContext(), URL_FB_PAGE);
+                        URL  = URL_FB_PAGE;
                         break;
                     }
                     case 2: {
-                        functions.browserIntent(getApplicationContext(), URL_FB_GROUP);
+                        //functions.browserIntent(getApplicationContext(), URL_FB_GROUP);
+                        URL = URL_FB_GROUP;
                         break;
                     }
                     case 3: {
-                        functions.browserIntent(getApplicationContext(), URL_TW_HANDLER);
+                        //functions.browserIntent(getApplicationContext(), URL_TW_HANDLER);
+                        URL = URL_TW_HANDLER;
                         break;
                     }
                     case 4: {
-                        functions.browserIntent(getApplicationContext(), URL_WEBSITE);
+                        //functions.browserIntent(getApplicationContext(), URL_WEBSITE);
+                        URL  = URL_WEBSITE;
                         break;
                     }
                     case 5: {
-                        functions.browserIntent(getApplicationContext(), URL_CORE_COMM);
+                        //functions.browserIntent(getApplicationContext(), URL_CORE_COMM);
+                        URL  = URL_CORE_COMM;
                         break;
                     }
                     case 6: {
                         functions.emailIntent(getApplicationContext(), EMAIL_MAILING, "", "\n\n\n\nSent from LUG Manipal Android App");
                         break;
                     }
+                }
+                if(URL != null) {
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    builder.setStartAnimations(getApplicationContext(), R.anim.slide_in_right, R.anim.slide_out_left);
+                    // vice versa
+                    builder.setExitAnimations(getApplicationContext(), R.anim.slide_in_left, R.anim.slide_out_right);
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    CustomTabActivityHelper.openCustomTab(
+                            HomeActivity.this, customTabsIntent, Uri.parse(URL), new WebViewFallback());
                 }
             }
         });
@@ -178,6 +199,7 @@ public class HomeActivity extends ActionBarActivity {
                             Snackbar.with(getApplicationContext()) // context
                                     .text("Something went wrong\nPlease try again later") // text to display
                                     .show(HomeActivity.this);
+                            Log.e("Parse error",e.getMessage());
                         }
                     }
                 });
