@@ -18,3 +18,8 @@ Read the [guidlines](https://github.com/LUGM/LUGMNotifier/blob/dev/CONTRIBUTION.
 <img src="/art/6/device-2014-12-24-125152.png" width="400"/>
 <img src="/art/7/device-2014-12-24-131331.png" width="500"/>
 <img src="/art/10/device-2014-12-24-130133.png" width="600"/>
+
+### Keys
+
+The Project uses [Parse](http://www.parse.com) as backend and therefore needs Client Key and Secret.  
+To obtain these you may message us on Gitter[![Join the chat at https://gitter.im/LUGM/LUGMNotifier](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/LUGM/LUGMNotifier?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
