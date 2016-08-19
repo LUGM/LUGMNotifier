@@ -36,8 +36,8 @@ public class AboutFragment extends Fragment {
         View rootView;
         super.onCreateView(inflater, container, savedInstanceState);
         this.activity = getActivity();
-        rootView=inflater.inflate(R.layout.fragment_about, container,false);
-        coordinatorLayout=(CoordinatorLayout)rootView.findViewById(R.id.about_coordinator_layout);
+        rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.about_coordinator_layout);
         return rootView;
     }
 
@@ -53,9 +53,9 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (functions.isConnected(view.getContext())) {
-                    functions.browserIntent(view.getContext(), URL_GITHUB);
+                    functions.browserIntent(getActivity(), URL_GITHUB);
                 } else {
-                    android.support.design.widget.Snackbar snackbar= android.support.design.widget.Snackbar.make(coordinatorLayout, "No Internet Connection", android.support.design.widget.Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", android.support.design.widget.Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
@@ -65,9 +65,9 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (functions.isConnected(view.getContext())) {
-                    functions.browserIntent(view.getContext(), URL_PLAY_STORE);
+                    functions.browserIntent(getActivity(), URL_PLAY_STORE);
                 } else {
-                    Snackbar snackbar=Snackbar.make(coordinatorLayout, "No Internet Connection",Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
@@ -80,7 +80,7 @@ public class AboutFragment extends Fragment {
                     String body = "Device: " + Build.MANUFACTURER + " " + Build.BRAND + " " + Build.DEVICE + " " + Build.MODEL + "\nApp Version: " + APP_VERSION + "\nApp Package: " + APP_PACKAGE;
                     functions.emailIntent(view.getContext(), "chipset95@gmail.com", "App Suggestion : LUG Manipal", body);
                 } else {
-                    Snackbar snackbar=Snackbar.make(coordinatorLayout, "No Internet Connection",Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }

@@ -1,5 +1,6 @@
 package chipset.lugmnotifier.resources;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +12,7 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -168,7 +170,9 @@ public class Functions {
     /*
      * Function to start browser intent
      */
-    public void browserIntent(Context context, String url) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    public void browserIntent(Activity activity, String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(activity, Uri.parse(url));
     }
 }

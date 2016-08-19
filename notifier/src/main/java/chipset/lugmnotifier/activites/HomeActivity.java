@@ -12,7 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         notificationLoadingProgressBar = (ProgressBar) findViewById(R.id.notifications_loading_progress_bar);
         notificationLoadingProgressBar.setVisibility(View.VISIBLE);
-        coordinatorLayout =(CoordinatorLayout)findViewById(R.id.home_coordinator_layout);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.home_coordinator_layout);
         try {
             flag = getIntent().getExtras().getBoolean(KEY_SHOW);
             value = getIntent().getExtras().getString(KEY_TITLE);
@@ -109,31 +108,31 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0: {
-                        functions.browserIntent(getApplicationContext(), URL_GITHUB_ORG);
+                        functions.browserIntent(HomeActivity.this, URL_GITHUB_ORG);
                         break;
                     }
                     case 1: {
-                        functions.browserIntent(getApplicationContext(), URL_FB_PAGE);
+                        functions.browserIntent(HomeActivity.this, URL_FB_PAGE);
                         break;
                     }
                     case 2: {
-                        functions.browserIntent(getApplicationContext(), URL_FB_GROUP);
+                        functions.browserIntent(HomeActivity.this, URL_FB_GROUP);
                         break;
                     }
                     case 3: {
-                        functions.browserIntent(getApplicationContext(), URL_TW_HANDLER);
+                        functions.browserIntent(HomeActivity.this, URL_TW_HANDLER);
                         break;
                     }
                     case 4: {
-                        functions.browserIntent(getApplicationContext(), URL_WEBSITE);
+                        functions.browserIntent(HomeActivity.this, URL_WEBSITE);
                         break;
                     }
                     case 5: {
-                        functions.browserIntent(getApplicationContext(), URL_CORE_COMM);
+                        functions.browserIntent(HomeActivity.this, URL_CORE_COMM);
                         break;
                     }
                     case 6: {
-                        functions.emailIntent(getApplicationContext(), EMAIL_MAILING, "", "\n\n\n\nSent from LUG Manipal Android App");
+                        functions.emailIntent(HomeActivity.this, EMAIL_MAILING, "", "\n\n\n\nSent from LUG Manipal Android App");
                         break;
                     }
                 }
@@ -183,9 +182,9 @@ public class HomeActivity extends AppCompatActivity {
                                 }
 
                             }
-                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail, image, date,getApplicationContext()));
+                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail, image, date, getApplicationContext()));
                         } else {
-                            Snackbar snackbar= android.support.design.widget.Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", android.support.design.widget.Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = android.support.design.widget.Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", android.support.design.widget.Snackbar.LENGTH_SHORT);
                             snackbar.show();
                         }
                     }
@@ -193,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
             } else {
                 notificationLoadingProgressBar.setVisibility(View.GONE);
                 notificationSwipeRefreshLayout.setRefreshing(false);
-                Snackbar snackbar=Snackbar.make(coordinatorLayout, "No Internet Connection",Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
                 snackbar.show();
             }
         }
@@ -240,7 +239,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(Gravity.START|Gravity.LEFT)) {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawers();
             return;
         }
