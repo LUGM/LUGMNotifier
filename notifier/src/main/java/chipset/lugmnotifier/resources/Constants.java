@@ -20,7 +20,7 @@ public class Constants {
     public static String KEY_CLASS_NOTIFICATION = "Notifications";
     public static String KEY_DETAIL = "detail";
     public static String KEY_SHOW = "show";
-    public static String URL_GITHUB = "https://github.com/chipset95/LUGMNotifier";
+    public static String URL_GITHUB = "https://github.com/LUGM/LUGMNotifier";
     public static String URL_PLAY_STORE = "https://play.google.com/store/apps/details?id=chipset.lugmnotifier";
 
     public static String APP_VERSION = BuildConfig.VERSION_NAME;
