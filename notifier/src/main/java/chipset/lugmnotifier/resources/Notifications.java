@@ -1,7 +1,5 @@
 package chipset.lugmnotifier.resources;
 
-import android.content.Context;
-
 import io.realm.RealmObject;
 
 /**
@@ -13,7 +11,6 @@ public class Notifications extends RealmObject {
     String detail;
     String image;
     long date;
-    Context context;
 
     public String getTitle() {
         return title;
@@ -47,11 +44,4 @@ public class Notifications extends RealmObject {
         this.date = date;
     }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
 }

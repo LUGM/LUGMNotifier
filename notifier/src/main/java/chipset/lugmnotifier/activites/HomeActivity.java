@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,11 +27,16 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import chipset.lugmnotifier.R;
 import chipset.lugmnotifier.resources.Functions;
-import chipset.lugmnotifier.resources.NotificationListViewAdapter;
+import chipset.lugmnotifier.resources.NotificationAdapter;
+import chipset.lugmnotifier.resources.Notifications;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 import static chipset.lugmnotifier.resources.Constants.EMAIL_MAILING;
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
@@ -57,14 +64,13 @@ public class HomeActivity extends AppCompatActivity {
     Toolbar mToolbar;
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
-    ListView notificationListView, drawerListView;
+    ListView drawerListView;
+    RecyclerView notificationsRecyclerView;
+    ArrayList<Notifications> notificationsArrayList;
     SwipeRefreshLayout notificationSwipeRefreshLayout;
     ProgressBar notificationLoadingProgressBar;
     Functions functions = new Functions();
-    String[] title = new String[1];
-    String[] detail = new String[1];
-    String[] image = new String[1];
-    long[] date = new long[1];
+    Realm realm;
     boolean flag = false;
     String value;
     private CoordinatorLayout coordinatorLayout;
@@ -85,13 +91,18 @@ public class HomeActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        realm = Realm.getInstance(realmConfig);
+        //getNotifications();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(HomeActivity.this, mDrawerLayout, mToolbar, R.string.open, R.string.close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         String[] val = {"GitHub Organisation", "Facebook Page", "Facebook Group", "Twitter", "Website", "Core Committee", "Mailing List"};
         notificationSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.notificationSwipeRefreshLayout);
-        notificationListView = (ListView) findViewById(R.id.notificationListView);
+        notificationsRecyclerView = (RecyclerView) findViewById(R.id.notification_recycler_view);
         drawerListView = (ListView) findViewById(R.id.drawer_list);
         drawerListView.setAdapter(new ArrayAdapter<>(HomeActivity.this, R.layout.navigation_drawer_list_item, R.id.navigation_drawer_item, val));
 
@@ -99,7 +110,7 @@ public class HomeActivity extends AppCompatActivity {
         notificationSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new FetchData().getNotifications();
+                getNotifications();
             }
         });
 
@@ -140,59 +151,69 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private class FetchData {
-
-        public void getNotifications() {
-            if (functions.isConnected(getApplicationContext())) {
-                notificationSwipeRefreshLayout.setRefreshing(true);
-                ParseQuery<ParseObject> query = ParseQuery.getQuery(KEY_CLASS_NOTIFICATION);
-                query.addDescendingOrder("createdAt");
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> parseObjects, ParseException e) {
-                        notificationSwipeRefreshLayout.setRefreshing(false);
-                        notificationLoadingProgressBar.setVisibility(View.GONE);
-                        if (e == null) {
-                            if (parseObjects.size() == 0) {
-                                title = new String[1];
-                                detail = new String[1];
-                                title[0] = "Sorry";
-                                detail[0] = "No notifications";
-                                date[0] = 0;
-                                image[0] = "null";
-                            } else {
-                                title = new String[parseObjects.size()];
-                                detail = new String[parseObjects.size()];
-                                image = new String[parseObjects.size()];
-                                date = new long[parseObjects.size()];
-                                for (int i = 0; i < parseObjects.size(); i++) {
-                                    title[i] = parseObjects.get(i).getString(KEY_TITLE);
-                                    detail[i] = parseObjects.get(i).getString(KEY_DETAIL);
-                                    date[i] = parseObjects.get(i).getLong(KEY_DATE);
-                                    image[i] = parseObjects.get(i).getString(KEY_IMAGE);
-                                }
-                                if (flag) {
-                                    flag = false;
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                                    builder.setTitle(title[0]);
-                                    builder.setMessage(detail[0]);
-                                    builder.setPositiveButton(android.R.string.ok, null);
-                                    builder.create();
-                                    builder.show();
-                                }
-
-                            }
-                            notificationListView.setAdapter(new NotificationListViewAdapter(title, detail, image, date, getApplicationContext()));
+    @SuppressWarnings("unchecked")
+    public void getNotifications() {
+        if (functions.isConnected(getApplicationContext())) {
+            notificationSwipeRefreshLayout.setRefreshing(true);
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(KEY_CLASS_NOTIFICATION);
+            query.addDescendingOrder("createdAt");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> parseObjects, ParseException e) {
+                    notificationSwipeRefreshLayout.setRefreshing(false);
+                    notificationLoadingProgressBar.setVisibility(View.GONE);
+                    if (e == null) {
+                        if (parseObjects.size() == 0) {
+                            realm.beginTransaction();
+                            Notifications notifications = new Notifications();
+                            notifications.setTitle("Sorry");
+                            notifications.setDetail("No Notifications");
+                            notifications.setDate(0);
+                            notifications.setImage("null");
+                            realm.close();
                         } else {
-                            Snackbar snackbar = android.support.design.widget.Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", android.support.design.widget.Snackbar.LENGTH_SHORT);
-                            snackbar.show();
+                            for (int i = 0; i < parseObjects.size(); i++) {
+                                realm.beginTransaction();
+                                Notifications notifications = realm.createObject(Notifications.class);
+                                notifications.setTitle(parseObjects.get(i).getString(KEY_TITLE));
+                                notifications.setDetail(parseObjects.get(i).getString(KEY_DETAIL));
+                                notifications.setDate(parseObjects.get(i).getLong(KEY_DATE));
+                                notifications.setImage(parseObjects.get(i).getString(KEY_IMAGE));
+                                realm.commitTransaction();
+                                realm.close();
+                                notificationsArrayList.add(notifications);
+                            }
+                            if (flag) {
+                                flag = false;
+                                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                                builder.setTitle(notificationsArrayList.get(0).getTitle());
+                                builder.setMessage(notificationsArrayList.get(0).getDetail());
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.create();
+                                builder.show();
+                            }
+
                         }
+                        notificationsRecyclerView.setAdapter(new NotificationAdapter(notificationsArrayList, getApplicationContext()));
+                    } else {
+                        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
                     }
-                });
-            } else {
-                notificationLoadingProgressBar.setVisibility(View.GONE);
-                notificationSwipeRefreshLayout.setRefreshing(false);
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                    display();
+                }
+            });
+        } else {
+            notificationLoadingProgressBar.setVisibility(View.GONE);
+            notificationSwipeRefreshLayout.setRefreshing(false);
+            RealmResults results = realm.where(Notifications.class).findAll();
+            if(results.size() > 0){
+
+                notificationsArrayList = new ArrayList<>(results.subList(0,results.size()));
+                display();
+            }
+
+            else {
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Please Connect to Internet and Try Again", Snackbar.LENGTH_SHORT);
                 snackbar.show();
             }
         }
@@ -208,7 +229,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new FetchData().getNotifications();
+        getNotifications();
     }
 
     @Override
@@ -244,5 +265,14 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    private void display() {
+
+        notificationsRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        notificationsRecyclerView.setLayoutManager(linearLayoutManager);
+        notificationsRecyclerView.setAdapter(new NotificationAdapter(notificationsArrayList, getApplicationContext()));
     }
 }
