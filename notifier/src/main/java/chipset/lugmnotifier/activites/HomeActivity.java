@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,6 +86,7 @@ public class HomeActivity extends AppCompatActivity {
         notificationLoadingProgressBar = (ProgressBar) findViewById(R.id.notifications_loading_progress_bar);
         notificationLoadingProgressBar.setVisibility(View.VISIBLE);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.home_coordinator_layout);
+        notificationsArrayList = new ArrayList<>();
         try {
             flag = getIntent().getExtras().getBoolean(KEY_SHOW);
             value = getIntent().getExtras().getString(KEY_TITLE);
@@ -110,7 +112,7 @@ public class HomeActivity extends AppCompatActivity {
         notificationSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getNotifications();
+                new FetchData().getNotifications();
             }
         });
 
@@ -151,70 +153,72 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressWarnings("unchecked")
-    public void getNotifications() {
-        if (functions.isConnected(getApplicationContext())) {
-            notificationSwipeRefreshLayout.setRefreshing(true);
-            ParseQuery<ParseObject> query = ParseQuery.getQuery(KEY_CLASS_NOTIFICATION);
-            query.addDescendingOrder("createdAt");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> parseObjects, ParseException e) {
-                    notificationSwipeRefreshLayout.setRefreshing(false);
-                    notificationLoadingProgressBar.setVisibility(View.GONE);
-                    if (e == null) {
-                        if (parseObjects.size() == 0) {
-                            realm.beginTransaction();
-                            Notifications notifications = new Notifications();
-                            notifications.setTitle("Sorry");
-                            notifications.setDetail("No Notifications");
-                            notifications.setDate(0);
-                            notifications.setImage("null");
-                            realm.close();
-                        } else {
-                            for (int i = 0; i < parseObjects.size(); i++) {
+    private class FetchData {
+        @SuppressWarnings("unchecked")
+        public void getNotifications() {
+            if (functions.isConnected(getApplicationContext())) {
+                notificationSwipeRefreshLayout.setRefreshing(true);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(KEY_CLASS_NOTIFICATION);
+                query.addDescendingOrder("createdAt");
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                        notificationSwipeRefreshLayout.setRefreshing(false);
+                        notificationLoadingProgressBar.setVisibility(View.GONE);
+                        if (e == null) {
+                            if (parseObjects.size() == 0) {
                                 realm.beginTransaction();
-                                Notifications notifications = realm.createObject(Notifications.class);
-                                notifications.setTitle(parseObjects.get(i).getString(KEY_TITLE));
-                                notifications.setDetail(parseObjects.get(i).getString(KEY_DETAIL));
-                                notifications.setDate(parseObjects.get(i).getLong(KEY_DATE));
-                                notifications.setImage(parseObjects.get(i).getString(KEY_IMAGE));
+                                Notifications notifications = new Notifications();
+                                notifications.setTitle("Sorry");
+                                notifications.setDetail("No Notifications");
+                                notifications.setDate(0);
+                                notifications.setImage("null");
+                                //realm.close();
+                            } else {
+                                notificationsArrayList.clear();
+                                for (int i = 0; i < parseObjects.size(); i++) {
+                                    Notifications notifications = new Notifications();
+                                    notifications.setTitle(parseObjects.get(i).getString(KEY_TITLE));
+                                    notifications.setDetail(parseObjects.get(i).getString(KEY_DETAIL));
+                                    notifications.setDate(parseObjects.get(i).getLong(KEY_DATE));
+                                    notifications.setImage(parseObjects.get(i).getString(KEY_IMAGE));
+                                    notificationsArrayList.add(notifications);
+                                    Log.d("DEBUG", notifications.getTitle());
+                                }
+                                realm.beginTransaction();
+                                realm.copyToRealmOrUpdate(notificationsArrayList);
                                 realm.commitTransaction();
-                                realm.close();
-                                notificationsArrayList.add(notifications);
-                            }
-                            if (flag) {
-                                flag = false;
-                                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                                builder.setTitle(notificationsArrayList.get(0).getTitle());
-                                builder.setMessage(notificationsArrayList.get(0).getDetail());
-                                builder.setPositiveButton(android.R.string.ok, null);
-                                builder.create();
-                                builder.show();
-                            }
+                                if (flag) {
+                                    flag = false;
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                                    builder.setTitle(notificationsArrayList.get(0).getTitle());
+                                    builder.setMessage(notificationsArrayList.get(0).getDetail());
+                                    builder.setPositiveButton(android.R.string.ok, null);
+                                    builder.create();
+                                    builder.show();
+                                }
 
+                            }
+                            notificationsRecyclerView.setAdapter(new NotificationAdapter(notificationsArrayList, getApplicationContext()));
+                        } else {
+                            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
                         }
-                        notificationsRecyclerView.setAdapter(new NotificationAdapter(notificationsArrayList, getApplicationContext()));
-                    } else {
-                        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
+                        display();
                     }
+                });
+            } else {
+                notificationLoadingProgressBar.setVisibility(View.GONE);
+                notificationSwipeRefreshLayout.setRefreshing(false);
+                RealmResults results = realm.where(Notifications.class).findAll();
+                if (results.size() > 0) {
+
+                    notificationsArrayList = new ArrayList<>(results.subList(0, results.size()));
                     display();
+                } else {
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Please Connect to Internet and Try Again", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
-            });
-        } else {
-            notificationLoadingProgressBar.setVisibility(View.GONE);
-            notificationSwipeRefreshLayout.setRefreshing(false);
-            RealmResults results = realm.where(Notifications.class).findAll();
-            if(results.size() > 0){
-
-                notificationsArrayList = new ArrayList<>(results.subList(0,results.size()));
-                display();
-            }
-
-            else {
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Please Connect to Internet and Try Again", Snackbar.LENGTH_SHORT);
-                snackbar.show();
             }
         }
     }
@@ -229,7 +233,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getNotifications();
+        new FetchData().getNotifications();
     }
 
     @Override

@@ -1,12 +1,14 @@
 package chipset.lugmnotifier.resources;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by anuraag on 8/21/16.
  */
 public class Notifications extends RealmObject {
 
+    @PrimaryKey
     String title;
     String detail;
     String image;

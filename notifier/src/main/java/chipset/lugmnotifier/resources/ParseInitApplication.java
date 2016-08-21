@@ -14,11 +14,10 @@ public class ParseInitApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.initialize(getApplicationContext(),"Ba1WfrHmjuzjNOg4Q0rsA8FnbPPHTLRRsbbtbZHo","7SvjoweOT5lbm82A5tiDCvITL84uyontsfW7Equx");
-        new Parse.Configuration.Builder(this)
-                .applicationId("Ba1WfrHmjuzjNOg4Q0rsA8FnbPPHTLRRsbbtbZHo")
-                .clientKey("7SvjoweOT5lbm82A5tiDCvITL84uyontsfW7Equx")
-                .server("https://parseapi.back4app.com/").build();
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId("")
+                .clientKey("")
+                .server("https://parseapi.back4app.com/").build());
         ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
             public void done(ParseException e) {

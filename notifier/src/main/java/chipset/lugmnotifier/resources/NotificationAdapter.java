@@ -7,10 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +18,7 @@ import chipset.lugmnotifier.R;
 /**
  * Created by anuraag on 8/21/16.
  */
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     ArrayList<Notifications> notificationsArrayList;
     Context context;
@@ -34,14 +30,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     @Override
-    public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).
                 inflate(R.layout.notification_list_item, viewGroup, false);
-        return new NotificationViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(NotificationViewHolder mHolder, int position){
+    public void onBindViewHolder(final ViewHolder mHolder, int position){
 
         final Notifications notifications = notificationsArrayList.get(position);
         mHolder.detailTextView.setText(notifications.getDetail());
@@ -60,6 +56,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 context.startActivity(intent);
             }
         });
+        mHolder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mHolder.linearLayout.getVisibility() == View.GONE)
+                    mHolder.linearLayout.setVisibility(View.VISIBLE);
+                else
+                    mHolder.linearLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -67,25 +72,4 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         return notificationsArrayList.size();
     }
-
-    class NotificationViewHolder extends RecyclerView.ViewHolder{
-
-        TextView titleTextView, detailTextView, dateTextView;
-        ImageView imageView;
-        Button addToCalendarButton;
-        RelativeLayout relativeLayout;
-
-        public NotificationViewHolder(View itemView) {
-
-            super(itemView);
-            relativeLayout = (RelativeLayout) itemView;
-            titleTextView = (TextView) itemView.findViewById(R.id.notificationTitleTextView);
-            detailTextView = (TextView) itemView.findViewById(R.id.notificationDetailTextView);
-            dateTextView = (TextView) itemView.findViewById(R.id.notificationDateTextView);
-            imageView = (ImageView) itemView.findViewById(R.id.notificationImageView);
-            addToCalendarButton = (Button) itemView.findViewById(R.id.notificationAddToCalenderButton);
-        }
-    }
-
-
 }

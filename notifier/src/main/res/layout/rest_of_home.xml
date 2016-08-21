@@ -27,10 +27,7 @@
                 android:id="@+id/notification_recycler_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="15dp"
-                android:padding="@dimen/activity_vertical_margin"
-                android:scrollbars="vertical" />
+                android:padding="10dp"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
