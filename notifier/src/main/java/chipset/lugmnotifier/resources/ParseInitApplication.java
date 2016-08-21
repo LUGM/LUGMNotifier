@@ -9,14 +9,17 @@ import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.SaveCallback;
 
+import static chipset.lugmnotifier.resources.Constants.APPLICATION_ID;
+import static chipset.lugmnotifier.resources.Constants.CLIENT_KEY;
+
 public class ParseInitApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("")
-                .clientKey("")
+                .applicationId(APPLICATION_ID)
+                .clientKey(CLIENT_KEY)
                 .server("https://parseapi.back4app.com/").build());
         ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
