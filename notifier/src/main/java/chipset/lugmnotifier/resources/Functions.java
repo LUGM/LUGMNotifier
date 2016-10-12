@@ -17,6 +17,8 @@ import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import chipset.lugmnotifier.R;
+
 public class Functions {
 
     /*
@@ -44,7 +46,7 @@ public class Functions {
     /*
      * Function to show notification
      */
-    public void showNotification(String title, String subtitle, int icon,
+    public void showNotification(String title, String subtitle,
                                  Intent resultIntent, Context context, NotificationManager mNotifyMgr) {
 
         Uri soundUri = RingtoneManager
@@ -53,7 +55,7 @@ public class Functions {
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification mBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(title).setContentText(subtitle)
-                .setSmallIcon(icon).setContentIntent(pendingResultIntent)
+                .setSmallIcon(R.drawable.notificationicon).setContentIntent(pendingResultIntent)
                 .setSound(soundUri).setAutoCancel(true).build();
         mNotifyMgr = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -65,14 +67,14 @@ public class Functions {
      * Fuction to show notification without sound
      */
     public void showNotificationNoSound(String title, String subtitle,
-                                        int icon, Intent resultIntent, Context context,
+                                        Intent resultIntent, Context context,
                                         NotificationManager mNotifyMgr) {
 
         PendingIntent pendingResultIntent = PendingIntent.getActivity(context,
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification mBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(title).setContentText(subtitle)
-                .setSmallIcon(icon).setContentIntent(pendingResultIntent)
+                .setSmallIcon(R.drawable.notificationicon).setContentIntent(pendingResultIntent)
                 .setAutoCancel(true).build();
         mNotifyMgr = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
