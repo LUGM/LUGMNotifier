@@ -55,7 +55,7 @@ public class AboutFragment extends Fragment {
                 if (functions.isConnected(view.getContext())) {
                     functions.browserIntent(getActivity(), URL_GITHUB);
                 } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", android.support.design.widget.Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
