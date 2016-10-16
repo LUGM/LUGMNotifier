@@ -28,10 +28,10 @@ import chipset.lugmnotifier.resources.Functions;
  * Date : 24/12/14
  */
 public class LoginFragment extends Fragment {
-    Button loginButton, cancelButton;
-    EditText passwordEditText;
-    Functions functions = new Functions();
-    Activity activity;
+    private Button loginButton, cancelButton;
+    private EditText passwordEditText;
+    private Functions functions = new Functions();
+    private Activity activity;
     private CoordinatorLayout coordinatorLayout;
 
 

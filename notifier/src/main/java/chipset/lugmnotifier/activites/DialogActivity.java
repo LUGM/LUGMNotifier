@@ -16,13 +16,13 @@ import chipset.lugmnotifier.fragments.LoginFragment;
  * Date : 24/12/14
  */
 public class DialogActivity extends AppCompatActivity {
-    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
         int f = getIntent().getIntExtra("Fragment", 1);
+        Fragment fragment;
         switch (f) {
             case 0: {
                 fragment = new LoginFragment();

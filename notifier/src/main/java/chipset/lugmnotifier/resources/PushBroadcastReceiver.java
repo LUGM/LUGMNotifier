@@ -13,7 +13,7 @@ import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
 
 public class PushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
-    String value = null;
+    private String value = null;
 
     @Override
     public void onPushOpen(Context context, Intent intent) {

@@ -9,10 +9,10 @@ import io.realm.annotations.PrimaryKey;
 public class Notifications extends RealmObject {
 
     @PrimaryKey
-    String title;
-    String detail;
-    String image;
-    long date;
+    private String title;
+    private String detail;
+    private String image;
+    private long date;
 
     public String getTitle() {
         return title;

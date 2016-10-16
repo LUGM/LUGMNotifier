@@ -20,8 +20,8 @@ import chipset.lugmnotifier.R;
  */
 public class NotificationAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    ArrayList<Notifications> notificationsArrayList;
-    Context context;
+    private ArrayList<Notifications> notificationsArrayList;
+    private Context context;
 
     public NotificationAdapter(ArrayList<Notifications> notificationsArrayList, Context context) {
 
@@ -40,11 +40,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void onBindViewHolder(final ViewHolder mHolder, int position){
 
         final Notifications notifications = notificationsArrayList.get(position);
-        mHolder.detailTextView.setText(notifications.getDetail());
-        mHolder.titleTextView.setText(notifications.getTitle());
+        mHolder.setDetailText(notifications.getDetail());
+        mHolder.setTitleText(notifications.getTitle());
         Date eventDate = new Date(notifications.getDate());
-        mHolder.dateTextView.setText(new SimpleDateFormat("kk:mm dd/MM/yyyy", Locale.ENGLISH).format(eventDate));
-        mHolder.addToCalendarButton.setOnClickListener(new View.OnClickListener() {
+        mHolder.setDateText(new SimpleDateFormat("kk:mm dd/MM/yyyy", Locale.ENGLISH).format(eventDate));
+        mHolder.setCalendarOnClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_EDIT);
@@ -56,13 +56,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<ViewHolder> {
                 context.startActivity(intent);
             }
         });
-        mHolder.cardView.setOnClickListener(new View.OnClickListener() {
+        mHolder.setCardOnClick(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mHolder.linearLayout.getVisibility() == View.GONE)
-                    mHolder.linearLayout.setVisibility(View.VISIBLE);
+                if(mHolder.getLayoutVisibility() == View.GONE)
+                    mHolder.setLayoutVisibility(View.VISIBLE);
                 else
-                    mHolder.linearLayout.setVisibility(View.GONE);
+                    mHolder.setLayoutVisibility(View.GONE);
             }
         });
     }
