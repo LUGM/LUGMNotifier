@@ -44,15 +44,15 @@ import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
 
 public class AdminActivity extends AppCompatActivity {
 
-    String title, detail, image, date;
-    Calendar calendar = Calendar.getInstance();
-    Button sendPushButton;
-    EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText;
+    private String title, detail, image, date;
+    private Calendar calendar = Calendar.getInstance();
+    private Button sendPushButton;
+    public EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText;
     public static EditText  pushNotificationDateEditText;
-    Functions functions = new Functions();
-    ProgressDialog progressDialog;
-    Toolbar toolbar;
-    Long timeSinceEpoch;
+    public Functions functions = new Functions();
+    private ProgressDialog progressDialog;
+    private Toolbar toolbar;
+    public Long timeSinceEpoch;
     private CoordinatorLayout coordinatorLayout;
 
     @Override

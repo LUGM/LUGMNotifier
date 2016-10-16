@@ -26,9 +26,9 @@ import static chipset.lugmnotifier.resources.Constants.URL_PLAY_STORE;
  * Date : 24/12/14
  */
 public class AboutFragment extends Fragment {
-    Button githubButton, rnrButton, sugButton, okButton;
-    Functions functions = new Functions();
-    Activity activity;
+    private Button githubButton, rnrButton, sugButton, okButton;
+    private Functions functions = new Functions();
+    private Activity activity;
     private CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -55,7 +55,7 @@ public class AboutFragment extends Fragment {
                 if (functions.isConnected(view.getContext())) {
                     functions.browserIntent(getActivity(), URL_GITHUB);
                 } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", android.support.design.widget.Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }

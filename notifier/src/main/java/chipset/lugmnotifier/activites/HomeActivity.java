@@ -62,18 +62,18 @@ import static chipset.lugmnotifier.resources.Constants.URL_WEBSITE;
  * Last Modified: 06/12/15
  */
 public class HomeActivity extends AppCompatActivity {
-    Toolbar mToolbar;
-    DrawerLayout mDrawerLayout;
-    ActionBarDrawerToggle mDrawerToggle;
-    ListView drawerListView;
-    RecyclerView notificationsRecyclerView;
-    ArrayList<Notifications> notificationsArrayList;
-    SwipeRefreshLayout notificationSwipeRefreshLayout;
-    ProgressBar notificationLoadingProgressBar;
-    Functions functions = new Functions();
-    Realm realm;
-    boolean flag = false;
-    String value;
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private ListView drawerListView;
+    private RecyclerView notificationsRecyclerView;
+    private ArrayList<Notifications> notificationsArrayList;
+    private SwipeRefreshLayout notificationSwipeRefreshLayout;
+    private ProgressBar notificationLoadingProgressBar;
+    private Functions functions = new Functions();
+    private Realm realm;
+    private boolean flag = false;
+    private String value;
     private CoordinatorLayout coordinatorLayout;
 
     @Override

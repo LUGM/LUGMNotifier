@@ -15,11 +15,11 @@ import chipset.lugmnotifier.R;
  */
 public class ViewHolder extends RecyclerView.ViewHolder{
 
-    TextView titleTextView, detailTextView, dateTextView;
-    ImageView imageView;
-    Button addToCalendarButton;
-    CardView cardView;
-    LinearLayout linearLayout;
+    private TextView titleTextView, detailTextView, dateTextView;
+    private ImageView imageView;
+    private Button addToCalendarButton;
+    private CardView cardView;
+    private LinearLayout linearLayout;
 
     public ViewHolder(View itemView) {
 
@@ -31,5 +31,33 @@ public class ViewHolder extends RecyclerView.ViewHolder{
         imageView = (ImageView) itemView.findViewById(R.id.notificationImageView);
         addToCalendarButton = (Button) itemView.findViewById(R.id.notificationAddToCalenderButton);
         linearLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout);
+    }
+
+    public void setTitleText(String text) {
+        titleTextView.setText(text);
+    }
+
+    public void setDetailText(String text) {
+        detailTextView.setText(text);
+    }
+
+    public void setDateText(String text) {
+        dateTextView.setText(text);
+    }
+
+    public void setCalendarOnClick(View.OnClickListener listener) {
+        addToCalendarButton.setOnClickListener(listener);
+    }
+
+    public void setCardOnClick(View.OnClickListener listener) {
+        cardView.setOnClickListener(listener);
+    }
+
+    public void setLayoutVisibility(int visibility) {
+        linearLayout.setVisibility(visibility);
+    }
+
+    public int getLayoutVisibility() {
+        return linearLayout.getVisibility();
     }
 }

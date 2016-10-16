@@ -16,7 +16,7 @@ import chipset.lugmnotifier.fragments.LoginFragment;
  * Date : 24/12/14
  */
 public class DialogActivity extends AppCompatActivity {
-    Fragment fragment;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
