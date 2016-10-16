@@ -46,12 +46,10 @@ public class AdminActivity extends AppCompatActivity {
 
     private String title, detail, image, date;
     private Calendar calendar = Calendar.getInstance();
-    private Button sendPushButton;
     public EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText;
     public static EditText  pushNotificationDateEditText;
     public Functions functions = new Functions();
     private ProgressDialog progressDialog;
-    private Toolbar toolbar;
     public Long timeSinceEpoch;
     private CoordinatorLayout coordinatorLayout;
 
@@ -59,14 +57,14 @@ public class AdminActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-        toolbar = (Toolbar) findViewById(R.id.toolbar_admin);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_admin);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         coordinatorLayout=(CoordinatorLayout)findViewById(R.id.admin_coordinator_layout);
         progressDialog = new ProgressDialog(AdminActivity.this);
         progressDialog.setMessage("Please wait");
         progressDialog.setCancelable(false);
-        sendPushButton = (Button) findViewById(R.id.sendPushButton);
+        Button sendPushButton = (Button) findViewById(R.id.sendPushButton);
         pushNotificationTitleEditText = (EditText) findViewById(R.id.pushNotificationTitleEditText);
         pushNotificationDetailEditText = (EditText) findViewById(R.id.pushNotificationDetailEditText);
         pushNotificationImageEditText = (EditText) findViewById(R.id.pushNotificationImageEditText);

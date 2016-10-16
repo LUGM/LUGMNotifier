@@ -65,7 +65,6 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ListView drawerListView;
     private RecyclerView notificationsRecyclerView;
     private ArrayList<Notifications> notificationsArrayList;
     private SwipeRefreshLayout notificationSwipeRefreshLayout;
@@ -105,7 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         String[] val = {"GitHub Organisation", "Facebook Page", "Facebook Group", "Twitter", "Website", "Core Committee", "Mailing List"};
         notificationSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.notificationSwipeRefreshLayout);
         notificationsRecyclerView = (RecyclerView) findViewById(R.id.notification_recycler_view);
-        drawerListView = (ListView) findViewById(R.id.drawer_list);
+        ListView drawerListView = (ListView) findViewById(R.id.drawer_list);
         drawerListView.setAdapter(new ArrayAdapter<>(HomeActivity.this, R.layout.navigation_drawer_list_item, R.id.navigation_drawer_item, val));
 
         notificationSwipeRefreshLayout.setColorSchemeResources(R.color.peterRiver, R.color.alizarin, R.color.sunFlower, R.color.emerald);
