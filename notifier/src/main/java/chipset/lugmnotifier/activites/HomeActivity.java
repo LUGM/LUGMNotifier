@@ -1,10 +1,14 @@
 package chipset.lugmnotifier.activites;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,26 +22,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import chipset.lugmnotifier.R;
 import chipset.lugmnotifier.resources.Functions;
 import chipset.lugmnotifier.resources.NotificationAdapter;
 import chipset.lugmnotifier.resources.Notifications;
+import chipset.lugmnotifier.resources.RPResultListener;
+import chipset.lugmnotifier.resources.RuntimePermissionUtil;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import java.util.ArrayList;
+import java.util.List;
 
 import static chipset.lugmnotifier.resources.Constants.EMAIL_MAILING;
 import static chipset.lugmnotifier.resources.Constants.KEY_CLASS_NOTIFICATION;
@@ -55,227 +55,332 @@ import static chipset.lugmnotifier.resources.Constants.URL_WEBSITE;
 
 /**
  * Developer: chipset
- * Modified by: anuraag
+ * Modified by: nisrulz
  * Package : chipset.lugmnotifier.activities
  * Project : LUGMNotifier
  * Date Created: 12/10/14
- * Last Modified: 06/12/15
+ * Last Modified: 29/10/16
  */
 public class HomeActivity extends AppCompatActivity {
-    private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private RecyclerView notificationsRecyclerView;
-    private ArrayList<Notifications> notificationsArrayList;
-    private SwipeRefreshLayout notificationSwipeRefreshLayout;
-    private ProgressBar notificationLoadingProgressBar;
-    private Functions functions = new Functions();
-    private Realm realm;
-    private boolean flag = false;
-    private String value;
-    private CoordinatorLayout coordinatorLayout;
+  private DrawerLayout mDrawerLayout;
+  private ActionBarDrawerToggle mDrawerToggle;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_home);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        notificationLoadingProgressBar = (ProgressBar) findViewById(R.id.notifications_loading_progress_bar);
-        notificationLoadingProgressBar.setVisibility(View.VISIBLE);
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.home_coordinator_layout);
-        notificationsArrayList = new ArrayList<>();
-        try {
-            flag = getIntent().getExtras().getBoolean(KEY_SHOW);
-            value = getIntent().getExtras().getString(KEY_TITLE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        realm = Realm.getInstance(realmConfig);
-        //getNotifications();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(HomeActivity.this, mDrawerLayout, mToolbar, R.string.open, R.string.close);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        String[] val = {"GitHub Organisation", "Facebook Page", "Facebook Group", "Twitter", "Website", "Core Committee", "Mailing List"};
-        notificationSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.notificationSwipeRefreshLayout);
-        notificationsRecyclerView = (RecyclerView) findViewById(R.id.notification_recycler_view);
-        ListView drawerListView = (ListView) findViewById(R.id.drawer_list);
-        drawerListView.setAdapter(new ArrayAdapter<>(HomeActivity.this, R.layout.navigation_drawer_list_item, R.id.navigation_drawer_item, val));
+  private RecyclerView notificationsRecyclerView;
+  private ArrayList<Notifications> notificationsArrayList;
+  private SwipeRefreshLayout notificationSwipeRefreshLayout;
+  private ProgressBar notificationLoadingProgressBar;
+  private Functions functions = new Functions();
+  private Realm realm;
+  private boolean flag = false;
+  private String value;
+  private CoordinatorLayout coordinatorLayout;
 
-        notificationSwipeRefreshLayout.setColorSchemeResources(R.color.peterRiver, R.color.alizarin, R.color.sunFlower, R.color.emerald);
-        notificationSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new FetchData().getNotifications();
+  private final static String[] requestBasicPermissions = {
+      Manifest.permission.GET_ACCOUNTS, Manifest.permission.READ_PHONE_STATE
+  };
+
+  private boolean launched = false;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_home);
+
+    boolean hasReadPhoneState =
+        RuntimePermissionUtil.checkPermissonGranted(this, Manifest.permission.READ_PHONE_STATE);
+    boolean hasGetAcc =
+        RuntimePermissionUtil.checkPermissonGranted(this, Manifest.permission.GET_ACCOUNTS);
+    if (hasGetAcc && hasReadPhoneState) {
+
+      initActivity();
+    }
+    else {
+      RuntimePermissionUtil.requestPermission(HomeActivity.this, requestBasicPermissions, 100);
+    }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull final String[] permissions,
+      @NonNull final int[] grantResults) {
+    switch (requestCode) {
+      case 100: {
+
+        RuntimePermissionUtil.onRequestPermissionsResult(grantResults, new RPResultListener() {
+          @Override
+          public void onPermissionGranted() {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                && !launched) {
+              initActivity();
             }
+          }
+
+          @Override
+          public void onPermissionDenied() {
+            // do nothing
+          }
         });
+        break;
+      }
+      default:
+        //do nothing
+        break;
+    }
+  }
 
-        drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i) {
-                    case 0: {
-                        functions.browserIntent(HomeActivity.this, URL_GITHUB_ORG);
-                        break;
-                    }
-                    case 1: {
-                        functions.browserIntent(HomeActivity.this, URL_FB_PAGE);
-                        break;
-                    }
-                    case 2: {
-                        functions.browserIntent(HomeActivity.this, URL_FB_GROUP);
-                        break;
-                    }
-                    case 3: {
-                        functions.browserIntent(HomeActivity.this, URL_TW_HANDLER);
-                        break;
-                    }
-                    case 4: {
-                        functions.browserIntent(HomeActivity.this, URL_WEBSITE);
-                        break;
-                    }
-                    case 5: {
-                        functions.browserIntent(HomeActivity.this, URL_CORE_COMM);
-                        break;
-                    }
-                    case 6: {
-                        functions.emailIntent(HomeActivity.this, EMAIL_MAILING, "", "\n\n\n\nSent from LUG Manipal Android App");
-                        break;
-                    }
-                }
+  private void initActivity() {
+    notificationLoadingProgressBar =
+        (ProgressBar) findViewById(R.id.notifications_loading_progress_bar);
+    notificationLoadingProgressBar.setVisibility(View.VISIBLE);
+    coordinatorLayout = (CoordinatorLayout) findViewById(R.id.home_coordinator_layout);
+    notificationsArrayList = new ArrayList<>();
+    try {
+      flag = getIntent().getExtras().getBoolean(KEY_SHOW);
+      value = getIntent().getExtras().getString(KEY_TITLE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    RealmConfiguration realmConfig =
+        new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
+    realm = Realm.getInstance(realmConfig);
+    //getNotifications();
+
+    initNavDrawerToggle();
+
+    notificationSwipeRefreshLayout =
+        (SwipeRefreshLayout) findViewById(R.id.notificationSwipeRefreshLayout);
+    notificationsRecyclerView = (RecyclerView) findViewById(R.id.notification_recycler_view);
+    notificationSwipeRefreshLayout.setColorSchemeResources(R.color.peterRiver, R.color.alizarin,
+        R.color.sunFlower, R.color.emerald);
+    notificationSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        getNotifications();
+      }
+    });
+    launched = true;
+  }
+
+  private void getNotifications() {
+    if (functions.isConnected(getApplicationContext())) {
+      notificationSwipeRefreshLayout.setRefreshing(true);
+      ParseQuery<ParseObject> query = ParseQuery.getQuery(KEY_CLASS_NOTIFICATION);
+      query.addDescendingOrder("createdAt");
+      query.findInBackground(new FindCallback<ParseObject>() {
+        @Override
+        public void done(List<ParseObject> parseObjects, ParseException e) {
+          notificationSwipeRefreshLayout.setRefreshing(false);
+          notificationLoadingProgressBar.setVisibility(View.GONE);
+          if (e == null) {
+            if (parseObjects.size() == 0) {
+              realm.beginTransaction();
+              Notifications notifications = new Notifications();
+              notifications.setTitle("Sorry");
+              notifications.setDetail("No Notifications");
+              notifications.setDate(0);
+              notifications.setImage("null");
+              //realm.close();
             }
-        });
-    }
-
-    private class FetchData {
-        @SuppressWarnings("unchecked")
-        public void getNotifications() {
-            if (functions.isConnected(getApplicationContext())) {
-                notificationSwipeRefreshLayout.setRefreshing(true);
-                ParseQuery<ParseObject> query = ParseQuery.getQuery(KEY_CLASS_NOTIFICATION);
-                query.addDescendingOrder("createdAt");
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> parseObjects, ParseException e) {
-                        notificationSwipeRefreshLayout.setRefreshing(false);
-                        notificationLoadingProgressBar.setVisibility(View.GONE);
-                        if (e == null) {
-                            if (parseObjects.size() == 0) {
-                                realm.beginTransaction();
-                                Notifications notifications = new Notifications();
-                                notifications.setTitle("Sorry");
-                                notifications.setDetail("No Notifications");
-                                notifications.setDate(0);
-                                notifications.setImage("null");
-                                //realm.close();
-                            } else {
-                                notificationsArrayList.clear();
-                                for (int i = 0; i < parseObjects.size(); i++) {
-                                    Notifications notifications = new Notifications();
-                                    notifications.setTitle(parseObjects.get(i).getString(KEY_TITLE));
-                                    notifications.setDetail(parseObjects.get(i).getString(KEY_DETAIL));
-                                    notifications.setDate(parseObjects.get(i).getLong(KEY_DATE));
-                                    notifications.setImage(parseObjects.get(i).getString(KEY_IMAGE));
-                                    notificationsArrayList.add(notifications);
-                                    Log.d("DEBUG", notifications.getTitle());
-                                }
-                                realm.beginTransaction();
-                                realm.copyToRealmOrUpdate(notificationsArrayList);
-                                realm.commitTransaction();
-                                if (flag) {
-                                    flag = false;
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                                    builder.setTitle(notificationsArrayList.get(0).getTitle());
-                                    builder.setMessage(notificationsArrayList.get(0).getDetail());
-                                    builder.setPositiveButton(android.R.string.ok, null);
-                                    builder.create();
-                                    builder.show();
-                                }
-
-                            }
-                            notificationsRecyclerView.setAdapter(new NotificationAdapter(notificationsArrayList, getApplicationContext()));
-                        } else {
-                            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later", Snackbar.LENGTH_SHORT);
-                            snackbar.show();
-                        }
-                        display();
-                    }
-                });
-            } else {
-                notificationLoadingProgressBar.setVisibility(View.GONE);
-                notificationSwipeRefreshLayout.setRefreshing(false);
-                RealmResults results = realm.where(Notifications.class).findAll();
-                if (results.size() > 0) {
-
-                    notificationsArrayList = new ArrayList<>(results.subList(0, results.size()));
-                    display();
-                } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Please Connect to Internet and Try Again", Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                }
+            else {
+              notificationsArrayList.clear();
+              for (int i = 0; i < parseObjects.size(); i++) {
+                Notifications notifications = new Notifications();
+                notifications.setTitle(parseObjects.get(i).getString(KEY_TITLE));
+                notifications.setDetail(parseObjects.get(i).getString(KEY_DETAIL));
+                notifications.setDate(parseObjects.get(i).getLong(KEY_DATE));
+                notifications.setImage(parseObjects.get(i).getString(KEY_IMAGE));
+                notificationsArrayList.add(notifications);
+                Log.d("DEBUG", notifications.getTitle());
+              }
+              realm.beginTransaction();
+              realm.copyToRealmOrUpdate(notificationsArrayList);
+              realm.commitTransaction();
+              if (flag) {
+                flag = false;
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                builder.setTitle(notificationsArrayList.get(0).getTitle());
+                builder.setMessage(notificationsArrayList.get(0).getDetail());
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.create();
+                builder.show();
+              }
             }
+            notificationsRecyclerView.setAdapter(
+                new NotificationAdapter(notificationsArrayList, getApplicationContext()));
+          }
+          else {
+            Snackbar snackbar =
+                Snackbar.make(coordinatorLayout, "Something went wrong\nPlease try again later",
+                    Snackbar.LENGTH_SHORT);
+            snackbar.show();
+          }
+          display();
         }
+      });
     }
+    else {
+      notificationLoadingProgressBar.setVisibility(View.GONE);
+      notificationSwipeRefreshLayout.setRefreshing(false);
+      RealmResults results = realm.where(Notifications.class).findAll();
+      if (results.size() > 0) {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-
+        notificationsArrayList = new ArrayList<>(results.subList(0, results.size()));
+        display();
+      }
+      else {
+        Snackbar snackbar =
+            Snackbar.make(coordinatorLayout, "Please Connect to Internet and Try Again",
+                Snackbar.LENGTH_SHORT);
+        snackbar.show();
+      }
     }
+  }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        new FetchData().getNotifications();
-    }
+  private void initNavDrawerToggle() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        if (id == R.id.action_admin) {
-            startActivity(new Intent(HomeActivity.this, DialogActivity.class).putExtra("Fragment", 0));
-        } else if (id == R.id.action_about) {
-            startActivity(new Intent(HomeActivity.this, DialogActivity.class).putExtra("Fragment", 1));
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_home);
+    setSupportActionBar(mToolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
+    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_design_support_layout);
+    mDrawerToggle = new ActionBarDrawerToggle(HomeActivity.this, mDrawerLayout, R.string.app_name,
+        R.string.app_name);
+    mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
+    NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+    navigationView.setNavigationItemSelectedListener(
+        new NavigationView.OnNavigationItemSelectedListener() {
+          @Override
+          public boolean onNavigationItemSelected(MenuItem item) {
 
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            //Checking if the item is in checked state or not, if not make it in checked state
+            if (item.isChecked()) {
+              item.setChecked(false);
+            }
+            else {
+              item.setChecked(true);
+            }
+
+            //Closing drawer on item click
             mDrawerLayout.closeDrawers();
-            return;
-        }
-        super.onBackPressed();
+
+            switch (item.getItemId()) {
+              case R.id.nav_menu_item1: {
+                functions.browserIntent(HomeActivity.this, URL_GITHUB_ORG);
+                break;
+              }
+              case R.id.nav_menu_item2: {
+                functions.browserIntent(HomeActivity.this, URL_FB_PAGE);
+                break;
+              }
+              case R.id.nav_menu_item3: {
+                functions.browserIntent(HomeActivity.this, URL_FB_GROUP);
+                break;
+              }
+              case R.id.nav_menu_item4: {
+                functions.browserIntent(HomeActivity.this, URL_TW_HANDLER);
+                break;
+              }
+              case R.id.nav_menu_item5: {
+                functions.browserIntent(HomeActivity.this, URL_WEBSITE);
+                break;
+              }
+              case R.id.nav_menu_item6: {
+                functions.browserIntent(HomeActivity.this, URL_CORE_COMM);
+                break;
+              }
+              case R.id.nav_menu_item7: {
+                functions.emailIntent(HomeActivity.this, EMAIL_MAILING, "",
+                    "\n\n\n\nSent from LUG Manipal Android App");
+                break;
+              }
+              default:
+                //do nothing
+                break;
+            }
+            return true;
+          }
+        });
+
+    getSupportActionBar().setHomeButtonEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+  }
+
+  @Override
+  public void onPostCreate(Bundle savedInstanceState) {
+    super.onPostCreate(savedInstanceState);
+    if (mDrawerToggle != null) {
+      mDrawerToggle.syncState();
+    }
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    if (mDrawerToggle != null) {
+      mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu, menu);
+    return true;
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (launched) {
+      getNotifications();
+    }
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+
+    // This is required to make the drawer toggle work
+    if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
+      return true;
     }
 
-    private void display() {
+        /*
+         * if you have other menu items in your activity/toolbar
+         * handle them here and return true
+         */
 
-        notificationsRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        notificationsRecyclerView.setLayoutManager(linearLayoutManager);
-        notificationsRecyclerView.setAdapter(new NotificationAdapter(notificationsArrayList, getApplicationContext()));
+    int id = item.getItemId();
+
+    switch (id) {
+      case R.id.action_admin:
+        startActivity(new Intent(HomeActivity.this, DialogActivity.class).putExtra("Fragment", 0));
+        break;
+      case R.id.action_about:
+        startActivity(new Intent(HomeActivity.this, DialogActivity.class).putExtra("Fragment", 1));
+        break;
+      default:
+        //do nothing
+        break;
     }
+
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+      mDrawerLayout.closeDrawers();
+      return;
+    }
+    super.onBackPressed();
+  }
+
+  private void display() {
+    notificationsRecyclerView.setHasFixedSize(true);
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+    notificationsRecyclerView.setLayoutManager(linearLayoutManager);
+    notificationsRecyclerView.setAdapter(
+        new NotificationAdapter(notificationsArrayList, getApplicationContext()));
+  }
 }

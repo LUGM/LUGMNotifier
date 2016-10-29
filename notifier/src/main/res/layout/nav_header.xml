@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="192dp"
+             android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/featured"
+        android:contentDescription="@string/app_name" />
+
+</FrameLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <group android:checkableBehavior="all">
+    <item
+        android:id="@+id/nav_menu_item1"
+        android:icon="@drawable/github"
+        android:title="GitHub Organisation"/>
+    <item
+        android:id="@+id/nav_menu_item2"
+        android:icon="@drawable/facebook2"
+        android:title="Facebook Page"/>
+
+    <item
+        android:id="@+id/nav_menu_item3"
+        android:icon="@drawable/facebook"
+        android:title="Facebook Group"/>
+    <item
+        android:id="@+id/nav_menu_item4"
+        android:icon="@drawable/twitter"
+        android:title="Twitter"/>
+    <item
+        android:id="@+id/nav_menu_item5"
+        android:icon="@drawable/website"
+        android:title="Website"/>
+    <item
+        android:id="@+id/nav_menu_item6"
+        android:icon="@drawable/group"
+        android:title="Core Committee"/>
+    <item
+        android:id="@+id/nav_menu_item7"
+        android:icon="@drawable/mail"
+        android:title="Mailing List"/>
+  </group>
+
+</menu>
