@@ -59,8 +59,6 @@ import static chipset.lugmnotifier.resources.Constants.URL_WEBSITE;
 public class HomeActivity extends AppCompatActivity {
   private DrawerLayout mDrawerLayout;
   private ActionBarDrawerToggle mDrawerToggle;
-  private NavigationView navigationView;
-  private Toolbar mToolbar;
 
   private RecyclerView notificationsRecyclerView;
   private ArrayList<Notifications> notificationsArrayList;
@@ -187,8 +185,7 @@ public class HomeActivity extends AppCompatActivity {
   }
 
   private void initNavDrawerToggel() {
-
-    mToolbar = (Toolbar) findViewById(R.id.toolbar_home);
+    Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_home);
     setSupportActionBar(mToolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -197,7 +194,7 @@ public class HomeActivity extends AppCompatActivity {
         R.string.app_name);
     mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-    navigationView = (NavigationView) findViewById(R.id.navigation_view);
+    NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
     navigationView.setNavigationItemSelectedListener(
         new NavigationView.OnNavigationItemSelectedListener() {
           @Override
@@ -244,6 +241,9 @@ public class HomeActivity extends AppCompatActivity {
                     "\n\n\n\nSent from LUG Manipal Android App");
                 break;
               }
+              default:
+                //do nothing
+                break;
             }
             return true;
           }
@@ -298,6 +298,9 @@ public class HomeActivity extends AppCompatActivity {
         break;
       case R.id.action_about:
         startActivity(new Intent(HomeActivity.this, DialogActivity.class).putExtra("Fragment", 1));
+        break;
+      default:
+        // do nothing
         break;
     }
 
