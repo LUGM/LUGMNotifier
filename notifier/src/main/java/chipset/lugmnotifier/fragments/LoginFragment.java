@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.nispok.snackbar.Snackbar;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -27,18 +28,21 @@ import chipset.lugmnotifier.resources.Functions;
  * Date : 24/12/14
  */
 public class LoginFragment extends Fragment {
-    Button loginButton, cancelButton;
-    EditText passwordEditText;
-    Functions functions = new Functions();
-    Activity activity;
+    private Button loginButton, cancelButton;
+    private EditText passwordEditText;
+    private Functions functions = new Functions();
+    private Activity activity;
+    private CoordinatorLayout coordinatorLayout;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        this.activity = getActivity();
-        return inflater.inflate(R.layout.fragment_login, container,
+        View rootView=inflater.inflate(R.layout.fragment_login, container,
                 false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        coordinatorLayout=(CoordinatorLayout)rootView.findViewById(R.id.login_coordinator_layout);
+        this.activity = getActivity();
+        return rootView;
     }
 
     @Override
@@ -68,15 +72,13 @@ public class LoginFragment extends Fragment {
                                         activity.finish();
                                     } else {
                                         progressDialog.dismiss();
-                                        Snackbar.with(activity) // context
-                                                .text("Something wen wrong, please try again") // text to display
-                                                .show(activity);
+                                        Snackbar snackbar= Snackbar.make(coordinatorLayout, "Something went wrong, please try again", Snackbar.LENGTH_SHORT);
+                                        snackbar.show();
                                     }
                                 } else {
                                     progressDialog.dismiss();
-                                    Snackbar.with(view.getContext()) // context
-                                            .text(e.getMessage()) // text to display
-                                            .show(activity);
+                                    Snackbar snackbar= Snackbar.make(coordinatorLayout, e.getMessage(), Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                 }
                             }
                         });
@@ -85,9 +87,8 @@ public class LoginFragment extends Fragment {
                         passwordEditText.setError(getString(R.string.ep));
                     }
                 } else {
-                    Snackbar.with(view.getContext()) // context
-                            .text("No Internet Connection") // text to display
-                            .show(activity);
+                    Snackbar snackbar=Snackbar.make(coordinatorLayout, "No Internet Connection",Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
         });

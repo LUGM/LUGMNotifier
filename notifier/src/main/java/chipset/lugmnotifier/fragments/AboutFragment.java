@@ -3,13 +3,13 @@ package chipset.lugmnotifier.fragments;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-import com.nispok.snackbar.Snackbar;
 
 import chipset.lugmnotifier.R;
 import chipset.lugmnotifier.resources.Functions;
@@ -26,17 +26,19 @@ import static chipset.lugmnotifier.resources.Constants.URL_PLAY_STORE;
  * Date : 24/12/14
  */
 public class AboutFragment extends Fragment {
-    Button githubButton, rnrButton, sugButton, okButton;
-    Functions functions = new Functions();
-    Activity activity;
-
+    private Button githubButton, rnrButton, sugButton, okButton;
+    private Functions functions = new Functions();
+    private Activity activity;
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView;
         super.onCreateView(inflater, container, savedInstanceState);
         this.activity = getActivity();
-        return inflater.inflate(R.layout.fragment_about, container,
-                false);
+        rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.about_coordinator_layout);
+        return rootView;
     }
 
     @Override
@@ -51,11 +53,10 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (functions.isConnected(view.getContext())) {
-                    functions.browserIntent(view.getContext(), URL_GITHUB);
+                    functions.browserIntent(getActivity(), URL_GITHUB);
                 } else {
-                    Snackbar.with(view.getContext()) // context
-                            .text("No Internet Connection") // text to display
-                            .show(activity);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
         });
@@ -64,11 +65,10 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (functions.isConnected(view.getContext())) {
-                    functions.browserIntent(view.getContext(), URL_PLAY_STORE);
+                    functions.browserIntent(getActivity(), URL_PLAY_STORE);
                 } else {
-                    Snackbar.with(view.getContext()) // context
-                            .text("No Internet Connection") // text to display
-                            .show(activity);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
         });
@@ -80,9 +80,8 @@ public class AboutFragment extends Fragment {
                     String body = "Device: " + Build.MANUFACTURER + " " + Build.BRAND + " " + Build.DEVICE + " " + Build.MODEL + "\nApp Version: " + APP_VERSION + "\nApp Package: " + APP_PACKAGE;
                     functions.emailIntent(view.getContext(), "chipset95@gmail.com", "App Suggestion : LUG Manipal", body);
                 } else {
-                    Snackbar.with(view.getContext()) // context
-                            .text("No Internet Connection") // text to display
-                            .show(activity);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
 

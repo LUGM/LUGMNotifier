@@ -17,7 +17,10 @@ public class ParseInitApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId(APPLICATION_ID)
+                .clientKey(CLIENT_KEY)
+                .server("https://parseapi.back4app.com/").build());
         ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -29,7 +32,6 @@ public class ParseInitApplication extends Application {
             }
         });
         ParseInstallation.getCurrentInstallation().saveInBackground();
-
     }
 
 }

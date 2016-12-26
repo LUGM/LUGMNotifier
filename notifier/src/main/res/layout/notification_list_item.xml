@@ -1,38 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    >
 
-    <RelativeLayout
+  <RelativeLayout
+      android:id="@+id/relative_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <TextView
+        android:id="@+id/notificationTitleTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        />
 
-        <TextView
-            android:id="@+id/notificationTitleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold|italic" />
+    <TextView
+        android:id="@+id/notificationDetailTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notificationTitleTextView"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="17.5sp"
+        tools:text="Random"
+        />
 
-        <TextView
-            android:id="@+id/notificationDetailTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/notificationTitleTextView"
-            android:gravity="center_horizontal"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:textColor="@color/black" />
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notificationDetailTextView"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+      <TextView
+          android:id="@+id/notificationDateTextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:textColor="@color/black"
+          android:textSize="17.5sp"
+          tools:text="Random"
+          />
 
-        <ImageView
-            android:id="@+id/notificationImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/notificationDetailTextView"
-            android:contentDescription="@string/app_name"
-            android:gravity="center"
-            android:visibility="gone" />
-    </RelativeLayout>
+      <ImageView
+          android:id="@+id/notificationImageView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:contentDescription="@string/app_name"
+          android:gravity="center"
+          />
+
+      <Button
+          android:id="@+id/notificationAddToCalenderButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/activity_horizontal_margin"
+          android:text="@string/addToCalender"
+          style="?android:attr/borderlessButtonStyle"
+          />
+
+    </LinearLayout>
+  </RelativeLayout>
 </android.support.v7.widget.CardView>
