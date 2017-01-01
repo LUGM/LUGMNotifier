@@ -4,10 +4,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import chipset.lugmnotifier.R;
 
 /**
@@ -15,11 +13,12 @@ import chipset.lugmnotifier.R;
  */
 public class ViewHolder extends RecyclerView.ViewHolder{
 
-    private TextView titleTextView, detailTextView, dateTextView;
-    private ImageView imageView;
-    private Button addToCalendarButton;
-    private CardView cardView;
-    private LinearLayout linearLayout;
+    private final TextView titleTextView;
+    private final TextView detailTextView;
+    private final TextView dateTextView;
+    private final Button addToCalendarButton;
+    private final CardView cardView;
+    private final LinearLayout linearLayout;
 
     public ViewHolder(View itemView) {
 
@@ -28,7 +27,6 @@ public class ViewHolder extends RecyclerView.ViewHolder{
         titleTextView = (TextView) itemView.findViewById(R.id.notificationTitleTextView);
         detailTextView = (TextView) itemView.findViewById(R.id.notificationDetailTextView);
         dateTextView = (TextView) itemView.findViewById(R.id.notificationDateTextView);
-        imageView = (ImageView) itemView.findViewById(R.id.notificationImageView);
         addToCalendarButton = (Button) itemView.findViewById(R.id.notificationAddToCalenderButton);
         linearLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout);
     }

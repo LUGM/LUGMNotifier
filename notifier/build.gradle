@@ -3,7 +3,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId "chipset.lugmnotifier"
@@ -23,7 +23,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    def supportLibVer = "25.0.0"
+    def supportLibVer = "25.1.0"
     compile "com.android.support:support-v4:$supportLibVer"
     compile "com.android.support:design:$supportLibVer"
     compile "com.android.support:appcompat-v7:$supportLibVer"

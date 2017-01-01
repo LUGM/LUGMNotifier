@@ -22,4 +22,13 @@
     <string name="login">LOGIN</string>
     <string name="date">Enter Date and Time</string>
     <string name="addToCalender">Add to Calender</string>
+    <string name="github_organisation">GitHub Organisation</string>
+    <string name="facebook_page">Facebook Page</string>
+    <string name="facebook_group">Facebook Group</string>
+    <string name="twitter">Twitter</string>
+    <string name="website">Website</string>
+    <string name="core_committee">Core Committee</string>
+    <string name="mailing_list">Mailing List</string>
+    <string name="no_internet_con">No Internet Connection</string>
+    <string name="ERROR_REQ">Required</string>
 </resources>

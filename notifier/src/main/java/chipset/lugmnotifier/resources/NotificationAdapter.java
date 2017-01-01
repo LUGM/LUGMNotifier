@@ -7,23 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import chipset.lugmnotifier.R;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-import chipset.lugmnotifier.R;
-
-/**
- * Created by anuraag on 8/21/16.
- */
 public class NotificationAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    private ArrayList<Notifications> notificationsArrayList;
-    private Context context;
+    private final List<Notifications> notificationsArrayList;
+    private final Context context;
 
-    public NotificationAdapter(ArrayList<Notifications> notificationsArrayList, Context context) {
+    public NotificationAdapter(List<Notifications> notificationsArrayList, Context context) {
 
         this.notificationsArrayList = notificationsArrayList;
         this.context = context;

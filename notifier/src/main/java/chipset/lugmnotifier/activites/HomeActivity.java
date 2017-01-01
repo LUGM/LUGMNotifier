@@ -69,10 +69,9 @@ public class HomeActivity extends AppCompatActivity {
   private ArrayList<Notifications> notificationsArrayList;
   private SwipeRefreshLayout notificationSwipeRefreshLayout;
   private ProgressBar notificationLoadingProgressBar;
-  private Functions functions = new Functions();
+  private final Functions functions = new Functions();
   private Realm realm;
   private boolean flag = false;
-  private String value;
   private CoordinatorLayout coordinatorLayout;
 
   private final static String[] requestBasicPermissions = {
@@ -136,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
     notificationsArrayList = new ArrayList<>();
     try {
       flag = getIntent().getExtras().getBoolean(KEY_SHOW);
-      value = getIntent().getExtras().getString(KEY_TITLE);
+      String value = getIntent().getExtras().getString(KEY_TITLE);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -240,8 +239,9 @@ public class HomeActivity extends AppCompatActivity {
 
     Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_home);
     setSupportActionBar(mToolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+    if(getSupportActionBar()!=null){
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
     mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_design_support_layout);
     mDrawerToggle = new ActionBarDrawerToggle(HomeActivity.this, mDrawerLayout, R.string.app_name,
         R.string.app_name);
@@ -251,7 +251,7 @@ public class HomeActivity extends AppCompatActivity {
     navigationView.setNavigationItemSelectedListener(
         new NavigationView.OnNavigationItemSelectedListener() {
           @Override
-          public boolean onNavigationItemSelected(MenuItem item) {
+          public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             //Checking if the item is in checked state or not, if not make it in checked state
             if (item.isChecked()) {

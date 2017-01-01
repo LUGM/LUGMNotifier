@@ -28,9 +28,8 @@ import chipset.lugmnotifier.resources.Functions;
  * Date : 24/12/14
  */
 public class LoginFragment extends Fragment {
-    private Button loginButton, cancelButton;
     private EditText passwordEditText;
-    private Functions functions = new Functions();
+    private final Functions functions = new Functions();
     private Activity activity;
     private CoordinatorLayout coordinatorLayout;
 
@@ -48,12 +47,12 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loginButton = (Button) view.findViewById(R.id.login_button);
-        cancelButton = (Button) view.findViewById(R.id.cancel_button);
+        Button loginButton = (Button) view.findViewById(R.id.login_button);
+        Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
         passwordEditText = (EditText) view.findViewById(R.id.password_edit_text);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
-            ProgressDialog progressDialog = new ProgressDialog(activity);
+            final ProgressDialog progressDialog = new ProgressDialog(activity);
 
             @Override
             public void onClick(View v) {
@@ -64,6 +63,7 @@ public class LoginFragment extends Fragment {
                     String password = passwordEditText.getText().toString();
                     if (!password.isEmpty()) {
                         ParseUser.logInInBackground("admin", password, new LogInCallback() {
+                            @Override
                             public void done(ParseUser user, ParseException e) {
                                 if (e == null) {
                                     if (user != null) {

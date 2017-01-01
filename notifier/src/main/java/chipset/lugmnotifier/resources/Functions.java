@@ -91,7 +91,7 @@ public class Functions {
         Editor editor = pref.edit();
         editor.clear();
         editor.putBoolean(preferenceName, val);
-        editor.commit();
+        editor.apply();
     }
 
     public void putSharedPrefs(Context context, String preferenceName,
@@ -102,7 +102,7 @@ public class Functions {
         Editor editor = pref.edit();
         editor.clear();
         editor.putInt(preferenceName, val);
-        editor.commit();
+        editor.apply();
     }
 
     public void putSharedPrefs(Context context, String preferenceName,
@@ -113,7 +113,7 @@ public class Functions {
         Editor editor = pref.edit();
         editor.clear();
         editor.putString(preferenceName, val);
-        editor.commit();
+        editor.apply();
     }
 
 	/*
@@ -125,8 +125,7 @@ public class Functions {
                 .getSharedPreferences(preferenceName, 0); // 0 - for private
         // mode
 
-        boolean val = pref.getBoolean(preferenceName, true);
-        return val;
+        return pref.getBoolean(preferenceName, true);
 
     }
 
@@ -135,8 +134,7 @@ public class Functions {
                 .getSharedPreferences(preferenceName, 0); // 0 - for private
         // mode
 
-        int val = pref.getInt(preferenceName, 0);
-        return val;
+        return pref.getInt(preferenceName, 0);
 
     }
 
@@ -145,8 +143,7 @@ public class Functions {
                 .getSharedPreferences(preferenceName, 0); // 0 - for private
         // mode
 
-        String val = pref.getString(preferenceName, "null");
-        return val;
+        return pref.getString(preferenceName, "null");
 
     }
 

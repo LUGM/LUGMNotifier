@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
@@ -17,7 +18,8 @@ import java.util.Calendar;
  */
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-    public static final String PrefsFile="DatePrefsFile";
+    public static final String DATE_PREFS_FILE ="DatePrefsFile";
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         final Calendar c = Calendar.getInstance();
@@ -27,7 +29,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
     public void onDateSet(DatePicker view, int year, int month, int day){
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(PrefsFile,0);
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(DATE_PREFS_FILE,0);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putInt("Year",year);
         editor.putInt("Month",month);

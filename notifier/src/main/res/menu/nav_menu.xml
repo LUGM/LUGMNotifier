@@ -5,32 +5,32 @@
     <item
         android:id="@+id/nav_menu_item1"
         android:icon="@drawable/github"
-        android:title="GitHub Organisation"/>
+        android:title="@string/github_organisation"/>
     <item
         android:id="@+id/nav_menu_item2"
         android:icon="@drawable/facebook2"
-        android:title="Facebook Page"/>
+        android:title="@string/facebook_page"/>
 
     <item
         android:id="@+id/nav_menu_item3"
         android:icon="@drawable/facebook"
-        android:title="Facebook Group"/>
+        android:title="@string/facebook_group"/>
     <item
         android:id="@+id/nav_menu_item4"
         android:icon="@drawable/twitter"
-        android:title="Twitter"/>
+        android:title="@string/twitter"/>
     <item
         android:id="@+id/nav_menu_item5"
         android:icon="@drawable/website"
-        android:title="Website"/>
+        android:title="@string/website"/>
     <item
         android:id="@+id/nav_menu_item6"
         android:icon="@drawable/group"
-        android:title="Core Committee"/>
+        android:title="@string/core_committee"/>
     <item
         android:id="@+id/nav_menu_item7"
         android:icon="@drawable/mail"
-        android:title="Mailing List"/>
+        android:title="@string/mailing_list"/>
   </group>
 
 </menu>

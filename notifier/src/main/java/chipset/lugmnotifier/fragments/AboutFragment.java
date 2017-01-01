@@ -26,8 +26,7 @@ import static chipset.lugmnotifier.resources.Constants.URL_PLAY_STORE;
  * Date : 24/12/14
  */
 public class AboutFragment extends Fragment {
-    private Button githubButton, rnrButton, sugButton, okButton;
-    private Functions functions = new Functions();
+    private final Functions functions = new Functions();
     private Activity activity;
     private CoordinatorLayout coordinatorLayout;
 
@@ -44,10 +43,10 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        githubButton = (Button) view.findViewById(R.id.github_button);
-        rnrButton = (Button) view.findViewById(R.id.rnr_button);
-        sugButton = (Button) view.findViewById(R.id.sug_button);
-        okButton = (Button) view.findViewById(R.id.ok_button);
+        Button githubButton = (Button) view.findViewById(R.id.github_button);
+        Button rnrButton = (Button) view.findViewById(R.id.rnr_button);
+        Button sugButton = (Button) view.findViewById(R.id.sug_button);
+        Button okButton = (Button) view.findViewById(R.id.ok_button);
 
         githubButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +54,7 @@ public class AboutFragment extends Fragment {
                 if (functions.isConnected(view.getContext())) {
                     functions.browserIntent(getActivity(), URL_GITHUB);
                 } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.no_internet_con, Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
@@ -67,7 +66,7 @@ public class AboutFragment extends Fragment {
                 if (functions.isConnected(view.getContext())) {
                     functions.browserIntent(getActivity(), URL_PLAY_STORE);
                 } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.no_internet_con, Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
@@ -80,7 +79,7 @@ public class AboutFragment extends Fragment {
                     String body = "Device: " + Build.MANUFACTURER + " " + Build.BRAND + " " + Build.DEVICE + " " + Build.MODEL + "\nApp Version: " + APP_VERSION + "\nApp Package: " + APP_PACKAGE;
                     functions.emailIntent(view.getContext(), "chipset95@gmail.com", "App Suggestion : LUG Manipal", body);
                 } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.no_internet_con, Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }

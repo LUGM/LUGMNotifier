@@ -44,13 +44,18 @@ import static chipset.lugmnotifier.resources.Constants.KEY_TITLE;
 
 public class AdminActivity extends AppCompatActivity {
 
-    private String title, detail, image, date;
-    private Calendar calendar = Calendar.getInstance();
-    public EditText pushNotificationTitleEditText, pushNotificationDetailEditText, pushNotificationImageEditText;
-    public static EditText  pushNotificationDateEditText;
-    public Functions functions = new Functions();
+    private String title;
+    private String detail;
+    private String image;
+    private String date;
+    private final Calendar calendar = Calendar.getInstance();
+    private EditText pushNotificationTitleEditText;
+    private EditText pushNotificationDetailEditText;
+    private EditText pushNotificationImageEditText;
+    private EditText  pushNotificationDateEditText;
+    private final Functions functions = new Functions();
     private ProgressDialog progressDialog;
-    public Long timeSinceEpoch;
+    private Long timeSinceEpoch;
     private CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -59,7 +64,10 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_admin);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         coordinatorLayout=(CoordinatorLayout)findViewById(R.id.admin_coordinator_layout);
         progressDialog = new ProgressDialog(AdminActivity.this);
         progressDialog.setMessage("Please wait");
@@ -91,11 +99,11 @@ public class AdminActivity extends AppCompatActivity {
                     if (image.isEmpty())
                         image = "null";
                     if (title.isEmpty())
-                        pushNotificationTitleEditText.setError("Required");
+                        pushNotificationTitleEditText.setError(getString(R.string.ERROR_REQ));
                     if (detail.isEmpty())
-                        pushNotificationDetailEditText.setError("Required");
+                        pushNotificationDetailEditText.setError(getString(R.string.ERROR_REQ));
                     if (date.isEmpty())
-                        pushNotificationDateEditText.setError("Required");
+                        pushNotificationDateEditText.setError(getString(R.string.ERROR_REQ));
                     if (!title.isEmpty() && !detail.isEmpty() && !date.isEmpty()) {
                         progressDialog.show();
                         pushNotificationTitleEditText.setError(null);
@@ -149,8 +157,8 @@ public class AdminActivity extends AppCompatActivity {
         ParseUser.logOut();
         super.onPause();
     }
-    public long returnCalenderMillis(){
-        SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences(DatePickerFragment.PrefsFile,0);
+    private long returnCalenderMillis(){
+        SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences(DatePickerFragment.DATE_PREFS_FILE,0);
         int year=sharedPreferences.getInt("Year",0);
         int month=sharedPreferences.getInt("Month",1);
         int day=sharedPreferences.getInt("Day",2);
@@ -159,5 +167,9 @@ public class AdminActivity extends AppCompatActivity {
         calendar.clear();
         calendar.set(year, month, day, hour, minutes);
         return calendar.getTimeInMillis();
+    }
+
+    public void setDateInPushNotificationDateEditText(String info){
+        pushNotificationDateEditText.setText(info);
     }
 }

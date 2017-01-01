@@ -1,18 +1,16 @@
 package chipset.lugmnotifier.fragments;
 
 import android.app.Dialog;
-
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
-
+import chipset.lugmnotifier.activites.AdminActivity;
 import java.util.Calendar;
 import java.util.Date;
-
-import chipset.lugmnotifier.activites.AdminActivity;
 
 /**
  * Developer: anuraag
@@ -22,7 +20,8 @@ import chipset.lugmnotifier.activites.AdminActivity;
  */
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
-    private Calendar calendar=Calendar.getInstance();
+    private final Calendar calendar=Calendar.getInstance();
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
@@ -36,15 +35,17 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minutes) {
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(DatePickerFragment.PrefsFile, 0);
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(DatePickerFragment.DATE_PREFS_FILE, 0);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putInt("Hour",hourOfDay);
         editor.putInt("Minutes",minutes);
         editor.apply();
-        AdminActivity.pushNotificationDateEditText.setText(new Date(returnCalenderMillis()).toString());
+
+        // Set value in edit text in the right manner
+        ((AdminActivity)getActivity()).setDateInPushNotificationDateEditText(new Date(returnCalenderMillis()).toString());
     }
-    public long returnCalenderMillis(){
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(DatePickerFragment.PrefsFile,0);
+    private long returnCalenderMillis(){
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(DatePickerFragment.DATE_PREFS_FILE,0);
         int year=sharedPreferences.getInt("Year", 0);
         int month=sharedPreferences.getInt("Month",1);
         int day=sharedPreferences.getInt("Day",2);
