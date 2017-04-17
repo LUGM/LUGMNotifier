@@ -17,6 +17,8 @@ import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import chipset.lugmnotifier.R;
+
 public class Functions {
 
     /*
@@ -53,7 +55,7 @@ public class Functions {
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification mBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(title).setContentText(subtitle)
-                .setSmallIcon(icon).setContentIntent(pendingResultIntent)
+                .setSmallIcon(R.drawable.ic_notification).setContentIntent(pendingResultIntent)
                 .setSound(soundUri).setAutoCancel(true).build();
         NotificationManager mNotifyMgr = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -71,7 +73,7 @@ public class Functions {
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification mBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(title).setContentText(subtitle)
-                .setSmallIcon(icon).setContentIntent(pendingResultIntent)
+                .setSmallIcon(R.drawable.ic_notification).setContentIntent(pendingResultIntent)
                 .setAutoCancel(true).build();
         NotificationManager mNotifyMgr = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
